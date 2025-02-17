@@ -1,0 +1,53 @@
+:root {
+    --x: 10;
+    --y: 10;
+    --size: 64;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: #2a2a2a;
+}
+
+#container {
+    height: calc(var(--y) * var(--size) * 1px);
+    width: calc(var(--x) * var(--size) * 1px);
+    /* background: #333; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#pf {
+    height: calc(var(--y) * var(--size) * 1px);
+    width: calc(var(--x) * var(--size) * 1px);
+    background-size: contain;
+    overflow: hidden;
+    position: relative;
+    /* display: grid; */
+    /* grid-template-columns: repeat(var(--x), calc(var(--size) * 1px)); */
+}
+
+.piece {
+    border: 1px solid #aaa;
+    height: calc(var(--size) * 1px);
+    width: calc(var(--size) * 1px);
+}
+
+#player {
+    height: calc(var(--size) * 1px);
+    width: calc(var(--size) * 1px);
+    position: absolute;
+    top: calc(var(--size) * 4px);
+    left: calc(var(--size) * 4px);
+    z-index: 1;
+}
