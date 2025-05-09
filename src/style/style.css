@@ -2,6 +2,8 @@
     --x: 10;
     --y: 10;
     --size: 64;
+    --menu-x: 5;
+    --menu-y: 5;
 }
 
 * {
@@ -30,9 +32,9 @@ body {
 #pf {
     height: calc(var(--y) * var(--size) * 1px);
     width: calc(var(--x) * var(--size) * 1px);
-    background-size: contain;
     overflow: hidden;
     position: relative;
+    background-repeat: no-repeat;
     /* display: grid; */
     /* grid-template-columns: repeat(var(--x), calc(var(--size) * 1px)); */
 }
@@ -50,4 +52,24 @@ body {
     top: calc(var(--size) * 4px);
     left: calc(var(--size) * 4px);
     z-index: 1;
+}
+
+#player-overlay {
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-image: url("../gfx/grass2.png");
+}
+
+#main-menu {
+    background-color: none;
+    width: calc(var(--menu-x) * var(--size) * 1px);
+    height: calc(var(--menu-y) * var(--size) * 1px);
+    background-image: url("../gfx/main-menu-small.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    right: 0;
+    display: none;
 }
