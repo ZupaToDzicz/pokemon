@@ -1,4 +1,11 @@
-import { size, Cords, blockedCords, grass, locationSizes } from "./const";
+import { size, Cords } from "./const";
+import blockedCordsData from '../data/blocked_cords.json'
+import grassData from '../data/grass.json'
+import locationSizesData from '../data/location_sizes.json'
+
+const blockedCords: { [key: string]: Cords[] } = blockedCordsData;
+const grass: { [key: string]: Cords[] } = grassData;
+const locationSizes: { [key: string]: Cords } = locationSizesData;
 
 export class Location {
     name: string;

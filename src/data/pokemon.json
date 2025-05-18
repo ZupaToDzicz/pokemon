@@ -1,0 +1,105 @@
+{
+    "bulbasaur": {
+        "id": 1,
+        "base": {
+            "HP": 45,
+            "attack": 49,
+            "defense": 49,
+            "speed": 45,
+            "special": 65,
+            "exp": 64
+        },
+        "type1": "grass",
+        "type2": "poison",
+        "catchRate": 45,
+        "entry": "A strange seed was planted on its back at birth. The plant sprouts and grows with this POKéMON.",
+        "height": "0.7 m",
+        "weight": "6.9 kg",
+        "moves": [
+            {
+                "name": "growl",
+                "level": 1
+            },
+            {
+                "name": "tackle",
+                "level": 1
+            },
+            {
+                "name": "leech seed",
+                "level": 7
+            },
+            {
+                "name": "vine whip",
+                "level": 13
+            }
+        ]
+    },
+    "charmander": {
+        "id": 4,
+        "base": {
+            "HP": 39,
+            "attack": 52,
+            "defense": 43,
+            "speed": 65,
+            "special": 50,
+            "exp": 62
+        },
+        "type1": "fire",
+        "catchRate": 45,
+        "entry": "Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.",
+        "height": "0.6 m",
+        "weight": "8.5 kg",
+        "moves": [
+            {
+                "name": "growl",
+                "level": 1
+            },
+            {
+                "name": "scratch",
+                "level": 1
+            },
+            {
+                "name": "ember",
+                "level": 9
+            },
+            {
+                "name": "leer",
+                "level": 15
+            }
+        ]
+    },
+    "squirtle": {
+        "id": 7,
+        "base": {
+            "HP": 44,
+            "attack": 48,
+            "defense": 65,
+            "speed": 43,
+            "special": 50,
+            "exp": 63
+        },
+        "type1": "water",
+        "catchRate": 45,
+        "entry": "After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.",
+        "height": "0.5 m",
+        "weight": "9.0 kg",
+        "moves": [
+            {
+                "name": "tackle",
+                "level": 1
+            },
+            {
+                "name": "tail whip",
+                "level": 1
+            },
+            {
+                "name": "bubble",
+                "level": 8
+            },
+            {
+                "name": "water gun",
+                "level": 15
+            }
+        ]
+    }
+}

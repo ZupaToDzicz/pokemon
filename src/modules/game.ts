@@ -1,6 +1,9 @@
 import { Player } from "./player";
 import { Location } from "./location";
-import { playerFrames } from "./const";
+import framesData from "../data/frames.json"
+
+const frames: { [key: string]: { [key: string]: number } } = framesData;
+const playerFrames: { [key: string]: number } = frames['player-frames'];
 
 export class Game {
     blockMovement: boolean = false;
@@ -156,7 +159,7 @@ export class Game {
                 else if (event.key.toLowerCase() === "d") {
                     this.moveRight();
                 }
-                console.log(this.player.cords.x, this.player.cords.y);
+                // console.log(this.player.cords.x, this.player.cords.y);
             }
             if (event.key.toLowerCase() === "e") {
                 this.changeMenu();
