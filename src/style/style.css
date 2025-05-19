@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Pokemon';
+  src: url('pokemon-font.ttf');
+}
+
 :root {
     --x: 10;
     --y: 10;
@@ -13,6 +18,7 @@
 }
 
 body {
+    font-family: 'Pokemon', sans-serif;
     display: flex;
     height: 100vh;
     justify-content: center;

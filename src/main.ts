@@ -10,12 +10,10 @@ game.start();
 
 const supcioBulbasaur = new Pokemon("bulbasaur", 5);
 supcioBulbasaur.printStats();
-
-const supcioCharmander = new Pokemon("charmander", 5);
-supcioCharmander.printStats();
-
-const supcioSquirtle = new Pokemon("squirtle", 5);
-supcioSquirtle.printStats();
+supcioBulbasaur.levelUp();
+supcioBulbasaur.levelUp();
+supcioBulbasaur.levelUp();
+supcioBulbasaur.printStats();
 
 // useful
 // https://pokemondb.net/pokedex/game/red-blue-yellow

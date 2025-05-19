@@ -1,0 +1,98 @@
+{
+    "growl": {
+        "type": "normal",
+        "category": "status",
+        "power": null,
+        "accuracy": 1.0,
+        "pp": 40,
+        "effect": {
+            "stat": "attack",
+            "target": -1
+        }
+    },
+    "tackle": {
+        "type": "normal",
+        "category": "physical",
+        "power": 35,
+        "accuracy": 0.95,
+        "pp": 35
+    },
+    "leech seed": {
+        "type": "grass",
+        "category": "status",
+        "power": null,
+        "accuracy": 0.9,
+        "pp": 10,
+        "effects": {
+            "stat": "HP",
+            "target": "-(Math.floor(target.maxHP / 16) + 1)",
+            "self": "Math.floor(target.maxHP / 16) + 1"
+        }
+    },
+    "vine whip": {
+        "type": "grass",
+        "category": "physical",
+        "power": 35,
+        "accuracy": 1.0,
+        "pp": 10
+    },
+    "scratch": {
+        "type": "normal",
+        "category": "physical",
+        "power": 40,
+        "accuracy": 1.0,
+        "pp": 35
+    },
+    "ember": {
+        "type": "fire",
+        "category": "special",
+        "power": 40,
+        "accuracy": 1.0,
+        "pp": 25,
+        "effect": {
+            "chance": 0.1,
+            "statusCondition": "burn"
+        }
+    },
+    "leer": {
+        "type": "normal",
+        "category": "status",
+        "power": null,
+        "accuracy": 1.0,
+        "pp": 30,
+        "effect": {
+            "stat": "defense",
+            "target": -1
+        }
+    },
+    "tail whip": {
+        "type": "normal",
+        "category": "status",
+        "power": null,
+        "accuracy": 1.0,
+        "pp": 30,
+        "effect": {
+            "stat": "defense",
+            "target": -1
+        }
+    },
+    "bubble": {
+        "type": "water",
+        "category": "special",
+        "power": 20,
+        "accuracy": 1.0,
+        "pp": 30,
+        "effect": {
+            "chance": 0.1,
+            "stat": "speed",
+            "stages": -1
+        }
+    },
+    "water gun": {
+        "type": "water",
+        "category": "special",
+        "power": 40,
+        "accuracy": 1.0,
+        "pp": 25
+    }
+}
