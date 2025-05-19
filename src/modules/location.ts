@@ -1,7 +1,7 @@
 import { size, Cords } from "./const";
 import blockedCordsData from '../data/blocked_cords.json'
 import grassData from '../data/grass.json'
-import locationDataJSON from '../data/location_info.json'
+import locationDataJSON from '../data/location_data.json'
 
 const blockedCords: { [key: string]: Cords[] } = blockedCordsData;
 const grass: { [key: string]: Cords[] } = grassData;
@@ -56,6 +56,6 @@ export class Location {
             }
             else i--;
         }
-        console.log(this.spawnCords);
+        // console.log(this.spawnCords);
     }
 }

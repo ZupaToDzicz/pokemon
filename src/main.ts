@@ -6,6 +6,7 @@ const player = new Player("Red", 16, 46);
 const city = new Location("viridian-forest");
 const game = new Game(player, city);
 game.start();
+game.spawnPokemon()
 
 // sprites
 // https://www.spriters-resource.com/game_boy_gbc/pokemonredblue/

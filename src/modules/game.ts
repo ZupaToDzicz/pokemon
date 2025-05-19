@@ -1,5 +1,7 @@
 import { Player } from "./player";
 import { Location } from "./location";
+import { Pokemon } from "./pokemon";
+import { Battle } from "./battle";
 import framesData from "../data/frames.json"
 
 const frames: { [key: string]: { [key: string]: number } } = framesData;
@@ -10,6 +12,7 @@ export class Game {
     player: Player;
     location: Location;
     showMenu: boolean = false;
+    battle: (Battle | undefined) = undefined;
 
     constructor(player: Player, location: Location) {
         this.player = player;
@@ -37,6 +40,10 @@ export class Game {
         const mainMenu = document.createElement("div");
         mainMenu.id = "main-menu";
         pfCont.append(mainMenu);
+
+        const battleCont = document.createElement("div");
+        battleCont.id = "battle-cont";
+        pfCont.append(battleCont);
     }
 
     render() {
@@ -147,34 +154,39 @@ export class Game {
 
     initControls() {
         document.body.addEventListener("keydown", async (event) => {
-            if (!this.blockMovement && !this.showMenu) {
-                if (event.key.toLowerCase() === "w") {
-                    this.moveBack();
-                }
-                else if (event.key.toLowerCase() === "s") {
-                    this.moveFront();
-                }
-                else if (event.key.toLowerCase() === "a") {
-                    this.moveLeft();
-                }
-                else if (event.key.toLowerCase() === "d") {
-                    this.moveRight();
-                }
-
-                // console.log(this.player.cords.x, this.player.cords.y);
-
-                setTimeout(() => {
-                    if (this.checkSpawn()) {
-                        console.log('A wild pokemon appeard!');
-                        this.blockMovement = true
+            if (this.battle === undefined) {
+                if (!this.blockMovement && !this.showMenu) {
+                    if (event.key.toLowerCase() === "w") {
+                        this.moveBack();
                     }
-                    else {
-                        console.log('Nothing here :c');
+                    else if (event.key.toLowerCase() === "s") {
+                        this.moveFront();
                     }
-                }, 200);
-            }
-            if (event.key.toLowerCase() === "e") {
-                this.changeMenu();
+                    else if (event.key.toLowerCase() === "a") {
+                        this.moveLeft();
+                    }
+                    else if (event.key.toLowerCase() === "d") {
+                        this.moveRight();
+                    }
+    
+                    // console.log(this.player.cords.x, this.player.cords.y);
+    
+                    setTimeout(() => {
+                        if (this.checkSpawn()) {
+                            console.log('A wild pokemon appeard!');
+                            this.blockMovement = true;
+                            this.battle = new Battle(this.spawnPokemon(), this.player);
+                            this.battle.loadBattleScreen();
+                        }
+                        else {
+                            console.log('Nothing here :c');
+                        }
+                    }, 200);
+                }
+    
+                if (event.key.toLowerCase() === "e") {
+                    this.changeMenu();
+                }
             }
         });
     }
@@ -184,5 +196,15 @@ export class Game {
             return true;
         }
         return false;
+    }
+
+    spawnPokemon() {
+        const minLevel = this.location.level.min;
+        const maxLevel = this.location.level.max;
+        const pokemonName = this.location.pokemon[Math.floor(Math.random() * this.location.pokemon.length)];
+        const pokemonLevel = Math.floor(Math.random() * (maxLevel - minLevel)) + minLevel;
+
+        const wildPokemon = new Pokemon(pokemonName, pokemonLevel);
+        return wildPokemon;
     }
 }

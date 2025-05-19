@@ -80,3 +80,33 @@ body {
     right: 0;
     display: none;
 }
+
+#battle-cont {
+    height: calc(var(--y) * var(--size) * 1px);
+    width: calc(var(--x) * var(--size) * 1px);
+    background-image: url("../gfx/battle-interface.png");
+    background-position: center;
+    display: none;
+    position: relative;
+    z-index: 3;
+}
+
+#wild-pokemon-img {
+    height: 224px;
+    width: 224px;
+    background: green;
+    position: absolute;
+    left: 384px;
+    top: 32px;
+}
+
+#player-img {
+    height: 224px;
+    width: 256px;
+    background: green;
+    position: absolute;
+    top: 192px;
+    left: 32px;
+}
+
+/* #f7e0f6 */
