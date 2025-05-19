@@ -1,11 +1,11 @@
 import { size, Cords } from "./const";
 import blockedCordsData from '../data/blocked_cords.json'
 import grassData from '../data/grass.json'
-import locationSizesData from '../data/location_sizes.json'
+import locationDataJSON from '../data/location_info.json'
 
 const blockedCords: { [key: string]: Cords[] } = blockedCordsData;
 const grass: { [key: string]: Cords[] } = grassData;
-const locationSizes: { [key: string]: Cords } = locationSizesData;
+const locationData: { [key: string]: { [key: string]: any } } = locationDataJSON;
 
 export class Location {
     name: string;
@@ -14,14 +14,22 @@ export class Location {
     grass: Cords[];
     width: number;
     height: number;
+    pokemon: string[];
+    level: { min: number, max: number };
+    spawnCount: number;
+    spawnCords: Cords[];
 
     constructor(name: string) {
         this.name = name;
         this.src = `./src/gfx/${this.name}.png`;
         this.blockedCords = blockedCords[name];
         this.grass = grass[name];
-        this.width = locationSizes[name].x;
-        this.height = locationSizes[name].y;
+        this.width = locationData[name].size.x;
+        this.height = locationData[name].size.y;
+        this.pokemon = locationData[name].pokemon;
+        this.level = locationData[name].level;
+        this.spawnCount = locationData[name].spawn;
+        this.spawnCords = [];
     }
 
     renderLocation(cords: Cords) {
@@ -34,5 +42,20 @@ export class Location {
         else {
             document.getElementById("player-overlay")!.style.display = "none";
         }
+    }
+
+    setSpawnCords() {
+        this.spawnCords = [];
+
+        for (let i = 0; i < this.spawnCount; i++) {
+            const x = Math.floor(Math.random() * this.width);
+            const y = Math.floor(Math.random() * this.height);
+
+            if (this.grass.some((e) => { return e.x == x && e.y == y }) && !this.spawnCords.some(e => { return e.x == x && e.y == y })) {
+                this.spawnCords.push({ x: x, y: y });
+            }
+            else i--;
+        }
+        console.log(this.spawnCords);
     }
 }

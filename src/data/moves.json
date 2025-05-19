@@ -94,5 +94,16 @@
         "power": 40,
         "accuracy": 1.0,
         "pp": 25
+    },
+    "string shot": {
+        "type": "bug",
+        "category": "status",
+        "power": null,
+        "accuracy": 0.95,
+        "pp": 40,
+        "effect": {
+            "stat": "speed",
+            "target": -1
+        }
     }
 }

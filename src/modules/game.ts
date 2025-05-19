@@ -48,6 +48,7 @@ export class Game {
         this.location = location;
         document.getElementById("pf")!.style.backgroundImage = `url(${this.location.src})`;
         this.location.renderLocation(this.player.cords);
+        this.location.setSpawnCords();
     }
 
     changeMenu() {
@@ -159,11 +160,29 @@ export class Game {
                 else if (event.key.toLowerCase() === "d") {
                     this.moveRight();
                 }
+
                 // console.log(this.player.cords.x, this.player.cords.y);
+
+                setTimeout(() => {
+                    if (this.checkSpawn()) {
+                        console.log('A wild pokemon appeard!');
+                        this.blockMovement = true
+                    }
+                    else {
+                        console.log('Nothing here :c');
+                    }
+                }, 200);
             }
             if (event.key.toLowerCase() === "e") {
                 this.changeMenu();
             }
         });
+    }
+
+    checkSpawn(): boolean {
+        if (this.location.spawnCords.some(e => { return e.x == this.player.cords.x && e.y == this.player.cords.y })) {
+            return true;
+        }
+        return false;
     }
 }

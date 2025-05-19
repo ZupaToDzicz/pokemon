@@ -1,19 +1,14 @@
 import { Player } from "./modules/player";
 import { Location } from "./modules/location";
 import { Game } from "./modules/game";
-import { Pokemon } from "./modules/pokemon";
 
 const player = new Player("Red", 16, 46);
 const city = new Location("viridian-forest");
 const game = new Game(player, city);
 game.start();
 
-const supcioBulbasaur = new Pokemon("bulbasaur", 5);
-supcioBulbasaur.printStats();
-supcioBulbasaur.levelUp();
-supcioBulbasaur.levelUp();
-supcioBulbasaur.levelUp();
-supcioBulbasaur.printStats();
+// sprites
+// https://www.spriters-resource.com/game_boy_gbc/pokemonredblue/
 
 // useful
 // https://pokemondb.net/pokedex/game/red-blue-yellow

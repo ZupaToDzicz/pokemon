@@ -101,5 +101,31 @@
                 "level": 15
             }
         ]
+    },
+    "caterpie": {
+        "id": 10,
+        "base": {
+            "HP": 45,
+            "attack": 30,
+            "defense": 35,
+            "speed": 45,
+            "special": 20,
+            "exp": 53
+        },
+        "type1": "bug",
+        "catchRate": 255,
+        "entry": "Its short feet are tipped with suction pads that enable it to tirelessly climb slopes and walls.",
+        "height": "0.3 m",
+        "weight": "2.9 kg",
+        "moves": [
+            {
+                "name": "string shot",
+                "level": 1
+            },
+            {
+                "name": "tackle",
+                "level": 1
+            }
+        ]
     }
 }
