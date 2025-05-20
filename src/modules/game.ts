@@ -37,9 +37,13 @@ export class Game {
         this.render();
         this.initControls();
 
-        const mainMenu = document.createElement("div");
-        mainMenu.id = "main-menu";
-        pfCont.append(mainMenu);
+        // const mainMenu = document.createElement("div");
+        // mainMenu.id = "main-menu";
+        // pfCont.append(mainMenu);
+
+        const pokemonMenu = document.createElement("div");
+        pokemonMenu.id = "pokemon-menu";
+        pfCont.append(pokemonMenu);
 
         const battleCont = document.createElement("div");
         battleCont.id = "battle-cont";
@@ -58,13 +62,13 @@ export class Game {
         this.location.setSpawnCords();
     }
 
-    changeMenu() {
-        this.showMenu = !this.showMenu;
-        if (this.showMenu)
-            document.getElementById("main-menu")!.style.display = "block";
-        else
-            document.getElementById("main-menu")!.style.display = "none";
-    }
+    // changeMenu() {
+    //     this.showMenu = !this.showMenu;
+    //     if (this.showMenu)
+    //         document.getElementById("main-menu")!.style.display = "block";
+    //     else
+    //         document.getElementById("main-menu")!.style.display = "none";
+    // }
 
     moveBack() {
         if (this.player.walkingFrame == 1) {
@@ -185,7 +189,7 @@ export class Game {
                 }
     
                 if (event.key.toLowerCase() === "e") {
-                    this.changeMenu();
+                    this.player.showPokemon();
                 }
             }
         });

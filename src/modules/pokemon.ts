@@ -7,6 +7,7 @@ const movesData: { [key: string]: any } = movesDataJSON;
 export class Pokemon {
     name: string;
     level: number;
+    menuIcon: number;
     type1: string;
     type2?: string;
     iv: { [key: string]: number };
@@ -28,6 +29,7 @@ export class Pokemon {
     constructor(name: string, level: number) {
         this.name = name;
         this.level = level;
+        this.menuIcon = data[name].menuIcon;
 
         this.type1 = data[name].type1;
         if (data[name].type2) this.type2 = data[name].type2;

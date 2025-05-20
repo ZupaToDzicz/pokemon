@@ -1,4 +1,4 @@
-import { size, Cords } from "./const";
+import { size, Cords } from "./interface";
 import blockedCordsData from '../data/blocked_cords.json'
 import grassData from '../data/grass.json'
 import locationDataJSON from '../data/location_data.json'

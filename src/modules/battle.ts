@@ -1,10 +1,17 @@
 import { Player } from "./player";
 import { Pokemon } from "./pokemon";
 
+const cursorPositions = {
+    
+}
+
 export class Battle {
     wildPokemon: Pokemon;
     player: Player;
     playerPokemon: (Pokemon | undefined);
+    mainMenu: string[] = ["fight", "pokemon", "item", "run"];
+    // cursorPosition: number;
+    selectedOption: (string | undefined) = undefined;
     
     constructor(pokemon: Pokemon, player: Player) {
         this.wildPokemon = pokemon;
@@ -18,9 +25,15 @@ export class Battle {
         }
     }
     
+    battleControls() {
+
+    }
+
     loadBattleScreen() {
         const battleCont = document.getElementById('battle-cont')!;
         battleCont.style.display = "block";
+
+        battleCont.innerHTML = "";
 
         const wildPokemonImg = document.createElement("div");
         wildPokemonImg.id = "wild-pokemon-img";
@@ -67,5 +80,7 @@ export class Battle {
         maxHPCont.classList.add("pokemon-level");
         maxHPCont.innerText = `${this.playerPokemon!.maxHP}`
         battleCont.append(maxHPCont);
+
+        // document.addEventListener("keydown", )
     }
 }

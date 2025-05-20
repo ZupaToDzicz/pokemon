@@ -25,3 +25,4 @@ game.spawnPokemon()
 // https://www.dragonflycave.com/mechanics/gen-i-capturing#algorithm
 // https://github.com/pcattori/pokemon/blob/master/pokemon/data/moves.json
 // https://gist.github.com/agarie/2620966s
+// https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_icons_in_Generations_I_and_II

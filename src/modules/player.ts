@@ -1,5 +1,5 @@
-import { size } from "./const";
-import { Cords } from "./const";
+import { size } from "./interface";
+import { Cords } from "./interface";
 import { Pokemon } from "./pokemon";
 
 export class Player {
@@ -15,7 +15,7 @@ export class Player {
         this.img.src = "./src/gfx/player-sprite.png";
         this.cords = (x && y) ? { x: x, y: y } : { x: 0, y: 0 };
         this.walkingFrame = 1;
-        this.pokemon = [new Pokemon("bulbasaur", 5)];
+        this.pokemon = [new Pokemon("bulbasaur", 5), new Pokemon("charmander", 6)];
     }
 
     renderPlayer(frame: number) {
@@ -31,5 +31,38 @@ export class Player {
 
     setCoords(x: number, y: number) {
         this.cords = { x: x, y: y };
+    }
+
+    showPokemon() {
+        const pokemonMenu = document.getElementById("pokemon-menu")!;
+        pokemonMenu.innerHTML = "";
+
+        this.pokemon.forEach((pkmn) => {
+            const pokemonCont = document.createElement("div");
+            pokemonCont.classList.add("pokemon-cont");
+            pokemonMenu.append(pokemonCont)
+
+            const img = new Image(64, 64);
+            img.src = `src/gfx/pokemon-menu/pokemon-menu-${pkmn.menuIcon}.png`;
+            pokemonCont.append(img);
+            img.style.gridArea = "1 / 1 / 3 / 2";
+
+            const name = document.createElement("div");
+            name.innerText = pkmn.name.toLocaleUpperCase();
+            pokemonCont.append(name);
+
+            const level = document.createElement("div");
+            level.innerHTML = `<img src="src/gfx/level.png">${pkmn.level}`;
+            pokemonCont.append(level);
+
+            const HPBar = new Image();
+            HPBar.src = "src/gfx/hp-bar.png";
+            pokemonCont.append(HPBar);
+
+            const HP = document.createElement("div");
+            HP.innerText = `${pkmn.HP}/${pkmn.maxHP}`;
+            HP.style.justifyContent = "center";
+            pokemonCont.append(HP);
+        })
     }
 }

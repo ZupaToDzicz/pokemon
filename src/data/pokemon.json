@@ -15,6 +15,7 @@
         "entry": "A strange seed was planted on its back at birth. The plant sprouts and grows with this POKéMON.",
         "height": "0.7 m",
         "weight": "6.9 kg",
+        "menuIcon": 7,
         "moves": [
             {
                 "name": "growl",
@@ -49,6 +50,7 @@
         "entry": "Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.",
         "height": "0.6 m",
         "weight": "8.5 kg",
+        "menuIcon": 0,
         "moves": [
             {
                 "name": "growl",
@@ -83,6 +85,7 @@
         "entry": "After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.",
         "height": "0.5 m",
         "weight": "9.0 kg",
+        "menuIcon": 5,
         "moves": [
             {
                 "name": "tackle",
@@ -117,6 +120,7 @@
         "entry": "Its short feet are tipped with suction pads that enable it to tirelessly climb slopes and walls.",
         "height": "0.3 m",
         "weight": "2.9 kg",
+        "menuIcon": 6,
         "moves": [
             {
                 "name": "string shot",
