@@ -8,6 +8,7 @@ export class Player {
     walkingFrame: number;
     name: string;
     pokemon: Pokemon[];
+    menuCursor: number = 0;
 
     constructor(name: string, x?: number, y?: number) {
         this.name = name;
@@ -15,7 +16,7 @@ export class Player {
         this.img.src = "./src/gfx/player-sprite.png";
         this.cords = (x && y) ? { x: x, y: y } : { x: 0, y: 0 };
         this.walkingFrame = 1;
-        this.pokemon = [new Pokemon("bulbasaur", 5), new Pokemon("charmander", 6)];
+        this.pokemon = [new Pokemon("charmander", 5), new Pokemon("caterpie", 69), new Pokemon("squirtle", 420), new Pokemon("bulbasaur", 66), new Pokemon("charmander", 1), new Pokemon("charmander", 51)];
     }
 
     renderPlayer(frame: number) {
@@ -33,9 +34,14 @@ export class Player {
         this.cords = { x: x, y: y };
     }
 
-    showPokemon() {
+    renderPokemon() {
+        this.menuCursor = 0;
         const pokemonMenu = document.getElementById("pokemon-menu")!;
         pokemonMenu.innerHTML = "";
+
+        const cursorCol = document.createElement("div");
+        cursorCol.id = "cursor-col";
+        pokemonMenu.append(cursorCol);
 
         this.pokemon.forEach((pkmn) => {
             const pokemonCont = document.createElement("div");
@@ -64,5 +70,21 @@ export class Player {
             HP.style.justifyContent = "center";
             pokemonCont.append(HP);
         })
+    }
+
+    pokemonMenuControl(e: KeyboardEvent) {
+        document.getElementById("cursor-col")!.innerHTML = '';
+        const cursorCont = document.createElement("div");
+        cursorCont.classList.add("cursor");
+        document.getElementById("cursor-col")!.append(cursorCont);
+
+        if (e.key.toLowerCase() === "s" && this.menuCursor + 1 < this.pokemon.length) {
+            this.menuCursor += 1;
+        }
+        else if (e.key.toLowerCase() === "w" && this.menuCursor - 1 >= 0) {
+            this.menuCursor -= 1;
+        }
+        cursorCont.style.top = `${64 + 64 * this.menuCursor}px`;
+        console.log(this.menuCursor);
     }
 }

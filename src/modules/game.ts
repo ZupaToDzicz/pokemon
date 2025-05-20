@@ -62,13 +62,13 @@ export class Game {
         this.location.setSpawnCords();
     }
 
-    // changeMenu() {
-    //     this.showMenu = !this.showMenu;
-    //     if (this.showMenu)
-    //         document.getElementById("main-menu")!.style.display = "block";
-    //     else
-    //         document.getElementById("main-menu")!.style.display = "none";
-    // }
+    changeMenu() {
+        this.showMenu = !this.showMenu;
+        if (this.showMenu)
+            document.getElementById("pokemon-menu")!.style.display = "grid";
+        else
+            document.getElementById("pokemon-menu")!.style.display = "none";
+    }
 
     moveBack() {
         if (this.player.walkingFrame == 1) {
@@ -172,9 +172,9 @@ export class Game {
                     else if (event.key.toLowerCase() === "d") {
                         this.moveRight();
                     }
-    
+
                     // console.log(this.player.cords.x, this.player.cords.y);
-    
+
                     setTimeout(() => {
                         if (this.checkSpawn()) {
                             console.log('A wild pokemon appeard!');
@@ -187,9 +187,13 @@ export class Game {
                         }
                     }, 200);
                 }
-    
+
                 if (event.key.toLowerCase() === "e") {
-                    this.player.showPokemon();
+                    this.changeMenu();
+                    if (this.showMenu) {
+                        this.player.renderPokemon();
+                        // document.addEventListener('keydown', (e) => { this.player.pokemonMenuControl(e) });
+                    }
                 }
             }
         });
