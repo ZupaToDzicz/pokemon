@@ -115,6 +115,11 @@ moves: ${JSON.stringify(this.moves)}`)
         this.recoverHP();
         this.recoverPP();
     }
+
+    isAlive() {
+        if (this.HP > 0) return true;
+        else return false;
+    }
 }
 
 

@@ -89,6 +89,7 @@ body {
     display: none;
     position: relative;
     z-index: 3;
+    font-size: 32px;
 }
 
 #wild-pokemon-img {
@@ -107,6 +108,57 @@ body {
     position: absolute;
     top: 192px;
     left: 32px;
+}
+
+.pokemon-name {
+    width: 320px;
+    height: 32px;
+    position: absolute;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+}
+
+#wild-pokemon-name {
+    left: 32px;
+    top: 32px;
+}
+
+#player-pokemon-name {
+    top: 256px;
+    left: 320px;
+}
+
+.pokemon-level {
+    font-weight: bold;
+    height: 32px;
+    display: flex;
+    align-items: baseline;
+    width: 96px;
+    position: absolute;
+}
+
+#wild-pokemon-level {
+    top: 64px;
+    left: 128px;
+}
+
+#player-pokemon-level {
+    top: 288px;
+    left: 448px
+}
+
+#hp-cont {
+    justify-content: end;
+    align-items: center;
+    top: 352px;
+    left: 352px;
+}
+
+#max-hp-cont {
+    align-items: center;
+    top: 352px;
+    left: 480px;
 }
 
 /* #f7e0f6 */
