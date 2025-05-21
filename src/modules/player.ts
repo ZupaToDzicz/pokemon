@@ -8,7 +8,9 @@ export class Player {
     walkingFrame: number;
     name: string;
     pokemon: Pokemon[];
-    menuCursor: number = 0;
+    cursor: number = 0;
+    optionCursor: number = 0;
+    switchCursor: number = 0;
 
     constructor(name: string, x?: number, y?: number) {
         this.name = name;
@@ -35,9 +37,16 @@ export class Player {
     }
 
     renderPokemon() {
-        this.menuCursor = 0;
+        this.cursor = 0;
+        this.optionCursor = 0;
+        this.switchCursor = 0;
         const pokemonMenu = document.getElementById("pokemon-menu")!;
         pokemonMenu.innerHTML = "";
+
+        const menuText = document.createElement("div");
+        menuText.id = "menu-text";
+        pokemonMenu.append(menuText);
+        menuText.innerText = "Choose a POKéMON."
 
         const cursorCol = document.createElement("div");
         cursorCol.id = "cursor-col";
@@ -70,21 +79,9 @@ export class Player {
             HP.style.justifyContent = "center";
             pokemonCont.append(HP);
         })
-    }
 
-    pokemonMenuControl(e: KeyboardEvent) {
-        document.getElementById("cursor-col")!.innerHTML = '';
-        const cursorCont = document.createElement("div");
-        cursorCont.classList.add("cursor");
-        document.getElementById("cursor-col")!.append(cursorCont);
-
-        if (e.key.toLowerCase() === "s" && this.menuCursor + 1 < this.pokemon.length) {
-            this.menuCursor += 1;
-        }
-        else if (e.key.toLowerCase() === "w" && this.menuCursor - 1 >= 0) {
-            this.menuCursor -= 1;
-        }
-        cursorCont.style.top = `${64 + 64 * this.menuCursor}px`;
-        console.log(this.menuCursor);
+        const pokemonOptions = document.createElement("div");
+        pokemonOptions.id = "pokemon-options";
+        pokemonMenu.append(pokemonOptions);
     }
 }

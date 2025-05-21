@@ -198,4 +198,26 @@ body {
     z-index: 100;
 }
 
+#menu-text {
+    position: absolute;
+    font-size: 32px;
+    top: 448px;
+    left: 32px;
+    width: 570px;
+    height: 128px;
+    line-height: 64px;
+    letter-spacing: 2px;
+}
+
+#pokemon-options {
+    position: absolute;
+    width: 288px;
+    height: 224px;
+    background-image: url("../gfx/pokemon-options.png");
+    bottom: 32px;
+    right: 0;
+    display: none;
+    grid-template-rows: repeat(3, 64px);
+}
+
 /* #f7e0f6 */

@@ -11,7 +11,7 @@ export class Game {
     blockMovement: boolean = false;
     player: Player;
     location: Location;
-    showMenu: boolean = false;
+    showMenu: string = "";
     battle: (Battle | undefined) = undefined;
 
     constructor(player: Player, location: Location) {
@@ -63,11 +63,12 @@ export class Game {
     }
 
     changeMenu() {
-        this.showMenu = !this.showMenu;
-        if (this.showMenu)
+        if (this.showMenu == "pokemon") {
             document.getElementById("pokemon-menu")!.style.display = "grid";
-        else
+        }
+        else if (this.showMenu == "") {
             document.getElementById("pokemon-menu")!.style.display = "none";
+        }
     }
 
     moveBack() {
@@ -159,7 +160,7 @@ export class Game {
     initControls() {
         document.body.addEventListener("keydown", async (event) => {
             if (this.battle === undefined) {
-                if (!this.blockMovement && !this.showMenu) {
+                if (!this.blockMovement && this.showMenu == "") {
                     if (event.key.toLowerCase() === "w") {
                         this.moveBack();
                     }
@@ -189,12 +190,46 @@ export class Game {
                 }
 
                 if (event.key.toLowerCase() === "e") {
-                    this.changeMenu();
-                    if (this.showMenu) {
+                    if (this.showMenu == "") {
+                        this.showMenu = "pokemon";
+                        this.changeMenu();
                         this.player.renderPokemon();
-                        // document.addEventListener('keydown', (e) => { this.player.pokemonMenuControl(e) });
+                    }
+                    else if (this.showMenu == "pokemon") {
+                        this.showMenu = "";
+                        this.changeMenu();
                     }
                 }
+            }
+
+            if (this.showMenu == "pokemon") {
+                document.getElementById("cursor-col")!.innerHTML = '';
+                const cursorCont = document.createElement("div");
+                cursorCont.classList.add("cursor");
+                document.getElementById("cursor-col")!.append(cursorCont);
+
+                if (event.key.toLowerCase() === "s" && this.player.cursor + 1 < this.player.pokemon.length) {
+                    this.player.cursor += 1;
+                    cursorCont.style.top = `${64 + 64 * this.player.cursor}px`;
+                }
+                else if (event.key.toLowerCase() === "w" && this.player.cursor - 1 >= 0) {
+                    this.player.cursor -= 1;
+                    cursorCont.style.top = `${64 + 64 * this.player.cursor}px`;
+                }
+                
+                else if (event.key === "Enter") {
+                    cursorCont.style.top = `${64 + 64 * this.player.cursor}px`;
+                    this.showMenu = "pokemon-options";
+                    cursorCont.style.backgroundImage = 'url("src/gfx/cursor-outline.png")';
+                    this.player.optionCursor = 0;
+                    this.player.switchCursor = 0;
+                }
+            }
+
+            if (this.showMenu == "pokemon-options") {
+                const pokemonOptions = document.getElementById("pokemon-options")!;
+                pokemonOptions.style.display = "grid";
+
             }
         });
     }
