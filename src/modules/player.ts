@@ -18,7 +18,7 @@ export class Player {
         this.img.src = "./src/gfx/player-sprite.png";
         this.cords = (x && y) ? { x: x, y: y } : { x: 0, y: 0 };
         this.walkingFrame = 1;
-        this.pokemon = [new Pokemon("charmander", 5), new Pokemon("caterpie", 69), new Pokemon("squirtle", 420), new Pokemon("bulbasaur", 66), new Pokemon("charmander", 1), new Pokemon("charmander", 51)];
+        this.pokemon = [new Pokemon("charmander", 5), new Pokemon("caterpie", 69), new Pokemon("squirtle", 420), new Pokemon("bulbasaur", 66), new Pokemon("charmander", 1)];
     }
 
     renderPlayer(frame: number) {
@@ -83,5 +83,9 @@ export class Player {
         const pokemonOptions = document.createElement("div");
         pokemonOptions.id = "pokemon-options";
         pokemonMenu.append(pokemonOptions);
+
+        const cursorColOpt = document.createElement("div");
+        cursorColOpt.id = "cursor-col-opt";
+        pokemonOptions.append(cursorColOpt);
     }
 }

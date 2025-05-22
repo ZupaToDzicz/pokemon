@@ -62,13 +62,73 @@ export class Game {
         this.location.setSpawnCords();
     }
 
-    changeMenu() {
+    changeMenu(event: KeyboardEvent) {
         if (this.showMenu == "pokemon") {
-            document.getElementById("pokemon-menu")!.style.display = "grid";
+            this.player.renderPokemon();
+            this.pokemonMenu(event);
+        }
+        else if (this.showMenu == "pokemon-options") {
+            this.pokemonMenuOpt(event);
         }
         else if (this.showMenu == "") {
             document.getElementById("pokemon-menu")!.style.display = "none";
         }
+    }
+
+    pokemonMenu(event: KeyboardEvent) {
+        document.getElementById("pokemon-menu")!.style.display = "grid";
+
+        document.getElementById("cursor-col")!.innerHTML = '';
+        const cursorCont = document.createElement("div");
+        cursorCont.classList.add("cursor");
+        cursorCont.id = "main-cursor";
+        document.getElementById("cursor-col")!.append(cursorCont);
+
+        if (event.key.toLowerCase() === "s" && this.player.cursor + 1 < this.player.pokemon.length) {
+            this.player.cursor += 1;
+        }
+        else if (event.key.toLowerCase() === "w" && this.player.cursor - 1 >= 0) {
+            this.player.cursor -= 1;
+        }
+
+        else if (event.key === "Enter") {
+            cursorCont.style.top = `${64 + 64 * this.player.cursor}px`;
+            this.showMenu = "pokemon-options";
+            cursorCont.classList.add("cursor-outline");
+            this.player.optionCursor = 0;
+            this.player.switchCursor = 0;
+        }
+
+        cursorCont.style.top = `${64 + 64 * this.player.cursor}px`;
+    }
+
+    pokemonMenuOpt(event: KeyboardEvent) {
+        document.getElementById("cursor-col-opt")!.innerHTML = '';
+        const pokemonOptions = document.getElementById("pokemon-options")!;
+        pokemonOptions.style.display = "block";
+
+        const optionCursor = document.createElement("div");
+        optionCursor.classList.add("cursor");
+        document.getElementById("cursor-col-opt")!.append(optionCursor);
+
+        if (event.key.toLowerCase() === "s" && this.player.optionCursor + 1 <= 2) {
+            this.player.optionCursor += 1;
+        }
+        else if (event.key.toLowerCase() === "w" && this.player.optionCursor - 1 >= 0) {
+            this.player.optionCursor -= 1;
+        }
+
+        else if (event.key === "Enter") {
+            if (this.player.optionCursor == 2) {
+                pokemonOptions.style.display = "none";
+                this.showMenu = "pokemon";
+                this.player.optionCursor = 0;
+                this.player.switchCursor = 0;
+                document.getElementById("main-cursor")!.classList.remove("cursor-outline");
+            }
+        }
+
+        optionCursor.style.top = `${64 * this.player.optionCursor}px`;
     }
 
     moveBack() {
@@ -178,13 +238,10 @@ export class Game {
 
                     setTimeout(() => {
                         if (this.checkSpawn()) {
-                            console.log('A wild pokemon appeard!');
+                            // console.log('A wild pokemon appeard!');
                             this.blockMovement = true;
                             this.battle = new Battle(this.spawnPokemon(), this.player);
                             this.battle.loadBattleScreen();
-                        }
-                        else {
-                            console.log('Nothing here :c');
                         }
                     }, 200);
                 }
@@ -192,44 +249,22 @@ export class Game {
                 if (event.key.toLowerCase() === "e") {
                     if (this.showMenu == "") {
                         this.showMenu = "pokemon";
-                        this.changeMenu();
+                        this.changeMenu(event);
                         this.player.renderPokemon();
                     }
                     else if (this.showMenu == "pokemon") {
                         this.showMenu = "";
-                        this.changeMenu();
+                        this.changeMenu(event);
                     }
                 }
             }
 
             if (this.showMenu == "pokemon") {
-                document.getElementById("cursor-col")!.innerHTML = '';
-                const cursorCont = document.createElement("div");
-                cursorCont.classList.add("cursor");
-                document.getElementById("cursor-col")!.append(cursorCont);
-
-                if (event.key.toLowerCase() === "s" && this.player.cursor + 1 < this.player.pokemon.length) {
-                    this.player.cursor += 1;
-                    cursorCont.style.top = `${64 + 64 * this.player.cursor}px`;
-                }
-                else if (event.key.toLowerCase() === "w" && this.player.cursor - 1 >= 0) {
-                    this.player.cursor -= 1;
-                    cursorCont.style.top = `${64 + 64 * this.player.cursor}px`;
-                }
-                
-                else if (event.key === "Enter") {
-                    cursorCont.style.top = `${64 + 64 * this.player.cursor}px`;
-                    this.showMenu = "pokemon-options";
-                    cursorCont.style.backgroundImage = 'url("src/gfx/cursor-outline.png")';
-                    this.player.optionCursor = 0;
-                    this.player.switchCursor = 0;
-                }
+                this.pokemonMenu(event);
             }
 
             if (this.showMenu == "pokemon-options") {
-                const pokemonOptions = document.getElementById("pokemon-options")!;
-                pokemonOptions.style.display = "grid";
-
+                this.pokemonMenuOpt(event);
             }
         });
     }
