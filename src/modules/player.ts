@@ -36,8 +36,8 @@ export class Player {
         this.cords = { x: x, y: y };
     }
 
-    renderPokemon() {
-        this.cursor = 0;
+    renderPokemon(selected?: number) {
+        this.cursor = selected ? selected : 0;
         this.optionCursor = 0;
         this.switchCursor = 0;
         const pokemonMenu = document.getElementById("pokemon-menu")!;
@@ -87,5 +87,10 @@ export class Player {
         const cursorColOpt = document.createElement("div");
         cursorColOpt.id = "cursor-col-opt";
         pokemonOptions.append(cursorColOpt);
+    }
+
+    switchPokemon(p1: number, p2: number) {
+        if (p1 == p2) return;
+        [this.pokemon[p1], this.pokemon[p2]] = [this.pokemon[p2], this.pokemon[p1]];
     }
 }
