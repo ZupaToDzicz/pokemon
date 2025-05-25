@@ -139,11 +139,27 @@ export class Game {
 
             else if (event.key === "Enter") {
                 if (this.player.optionCursor == 1) {
-                    pokemonOptions.style.display = "none";
-                    this.showMenu = "switch-pokemon";
-                    this.changeMenu();
                     this.player.optionCursor = 0;
                     this.player.switchCursor = 0;
+                    if (this.battle === undefined) {
+                        pokemonOptions.style.display = "none";
+                        this.showMenu = "switch-pokemon";
+                        this.changeMenu();
+                    }
+                    else {
+                        if (this.player.pokemon[this.player.cursor].isAlive()) {
+                            this.showMenu = "";
+                            this.changeMenu();
+                            this.battle.playerPokemon = this.player.pokemon[this.player.cursor];
+                            this.battle.loadBattleScreen();
+
+                            this.battle!.setText(`Let's go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                            setTimeout(() => {
+                                this.showMenu = "battle";
+                                this.changeMenu();
+                            }, 1000);
+                        }
+                    }
                 }
                 else if (this.player.optionCursor == 2) {
                     pokemonOptions.style.display = "none";
@@ -195,6 +211,7 @@ export class Game {
     }
 
     battleMenu(event?: KeyboardEvent) {
+        this.battle?.clearText();
         const battleMenu = document.getElementById("battle-menu")!;
         battleMenu.style.display = "block";
         battleMenu.innerHTML = "";
@@ -223,6 +240,7 @@ export class Game {
 
             else if (event.key === 'Enter') {
                 if (this.battle!.cursor == 2) {
+                    this.player.cursor = this.player.pokemon.indexOf(this.battle?.playerPokemon!);
                     this.showMenu = "pokemon";
                     this.changeMenu();
                 }
@@ -348,20 +366,28 @@ export class Game {
                         else if (event.key.toLowerCase() === "d") {
                             this.moveRight();
                         }
-    
+
                         // console.log(this.player.cords.x, this.player.cords.y);
-    
+
                         setTimeout(() => {
                             if (this.checkSpawn()) {
                                 // console.log('A wild pokemon appeard!');
                                 this.battle = new Battle(this.spawnPokemon(), this.player);
                                 this.battle.loadBattleScreen();
-                                this.showMenu = "battle";
-                                this.changeMenu();
+                                this.battle.setText(`Wild ${this.battle.wildPokemon.name.toLocaleUpperCase()} appeared!`);
+
+                                setTimeout(() => {
+                                    this.battle!.setText(`Let's go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                                }, 1000);
+
+                                setTimeout(() => {
+                                    this.showMenu = "battle";
+                                    this.changeMenu();
+                                }, 2000);
                             }
                         }, 200);
                     }
-    
+
                     if (event.key.toLowerCase() === "e") {
                         if (this.showMenu == "") {
                             this.player.cursor = 0;
@@ -375,19 +401,19 @@ export class Game {
                         }
                     }
                 }
-    
-                else {
+
+                if (this.showMenu == "battle") {
                     this.battleMenu(event);
                 }
-    
-                if (this.showMenu == "pokemon") {
+
+                else if (this.showMenu == "pokemon") {
                     this.pokemonMenu(event);
                 }
-    
+
                 else if (this.showMenu == "pokemon-options") {
                     this.pokemonMenuOpt(event);
                 }
-    
+
                 else if (this.showMenu == "switch-pokemon") {
                     this.pokemonMenuSwitch(event);
                 }

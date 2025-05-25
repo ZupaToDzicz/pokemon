@@ -82,7 +82,15 @@ export class Battle {
         maxHPCont.classList.add("pokemon-level");
         maxHPCont.innerText = `${this.playerPokemon!.maxHP}`
         battleCont.append(maxHPCont);
+    }
 
-        // document.addEventListener("keydown", )
+    setText(text: string) {
+        const battleText = document.getElementById("battle-text")!;
+        battleText.innerText = text;
+    }
+
+    clearText() {
+        const battleText = document.getElementById("battle-text")!;
+        battleText.innerText = "";
     }
 }
