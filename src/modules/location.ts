@@ -44,7 +44,7 @@ export class Location {
         }
     }
 
-    setSpawnCords() {
+    setSpawnCords(exclude?: Cords) {
         this.spawnCords = [];
 
         for (let i = 0; i < this.spawnCount; i++) {
@@ -52,7 +52,8 @@ export class Location {
             const y = Math.floor(Math.random() * this.height);
 
             if (this.grass.some((e) => { return e.x == x && e.y == y }) && !this.spawnCords.some(e => { return e.x == x && e.y == y })) {
-                this.spawnCords.push({ x: x, y: y });
+                if (!(exclude && x == exclude.x && y == exclude.y))
+                    this.spawnCords.push({ x: x, y: y });
             }
             else i--;
         }

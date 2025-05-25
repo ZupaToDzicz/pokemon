@@ -45,6 +45,7 @@ export class Player {
 
         const menuText = document.createElement("div");
         menuText.id = "menu-text";
+        menuText.classList.add("menu-text");
         pokemonMenu.append(menuText);
         menuText.innerText = "Choose a POKéMON."
 

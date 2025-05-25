@@ -203,7 +203,7 @@ body {
     background-image: url("../gfx/cursor-outline.png");
 }
 
-#menu-text {
+.menu-text {
     position: absolute;
     font-size: 32px;
     top: 448px;
@@ -230,6 +230,17 @@ body {
     left: 32px;
     top: 32px;
     height: 160px;
+}
+
+#battle-menu {
+    width: 384px;
+    height: 192px;
+    background: rgba(102, 51, 153, 0.428);
+    background-image: url("../gfx/battle-menu.png");
+    position: absolute;
+    top: 416px;
+    left: 256px;
+    display: none;
 }
 
 /* #f7e0f6 */

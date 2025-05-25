@@ -1,16 +1,13 @@
 import { Player } from "./player";
 import { Pokemon } from "./pokemon";
 
-const cursorPositions = {
-    
-}
 
 export class Battle {
     wildPokemon: Pokemon;
     player: Player;
     playerPokemon: (Pokemon | undefined);
     mainMenu: string[] = ["fight", "pokemon", "item", "run"];
-    // cursorPosition: number;
+    cursor: number = 0;
     selectedOption: (string | undefined) = undefined;
     
     constructor(pokemon: Pokemon, player: Player) {
@@ -25,15 +22,20 @@ export class Battle {
         }
     }
     
-    battleControls() {
-
-    }
-
     loadBattleScreen() {
         const battleCont = document.getElementById('battle-cont')!;
         battleCont.style.display = "block";
-
         battleCont.innerHTML = "";
+
+        const battleMenu = document.createElement("div");
+        battleMenu.id = "battle-menu";
+        battleCont.append(battleMenu);
+
+        const battleText = document.createElement("div");
+        battleText.id = "battle-text";
+        battleText.classList.add("menu-text");
+        battleCont.append(battleText);
+        battleText.innerText = "";
 
         const wildPokemonImg = document.createElement("div");
         wildPokemonImg.id = "wild-pokemon-img";

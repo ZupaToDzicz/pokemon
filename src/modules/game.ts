@@ -7,6 +7,13 @@ import framesData from "../data/frames.json"
 const frames: { [key: string]: { [key: string]: number } } = framesData;
 const playerFrames: { [key: string]: number } = frames['player-frames'];
 
+const cursorStyles = [
+    'top: 64px; left: 32px;',
+    'top: 128px; left: 32px;',
+    'top: 64px; left: 224px;',
+    'top: 128px; left: 224px;'
+]
+
 export class Game {
     blockMovement: boolean = false;
     player: Player;
@@ -73,8 +80,12 @@ export class Game {
         else if (this.showMenu == "switch-pokemon") {
             this.pokemonMenuSwitch();
         }
+        else if (this.showMenu == "battle") {
+            this.battleMenu();
+        }
         else if (this.showMenu == "") {
             document.getElementById("pokemon-menu")!.style.display = "none";
+            document.getElementById("battle-menu")!.style.display = "none";
         }
     }
 
@@ -95,7 +106,7 @@ export class Game {
             else if (event.key.toLowerCase() === "w" && this.player.cursor - 1 >= 0) {
                 this.player.cursor -= 1;
             }
-    
+
             else if (event.key === "Enter") {
                 cursor.style.top = `${64 + 64 * this.player.cursor}px`;
                 this.showMenu = "pokemon-options";
@@ -125,7 +136,7 @@ export class Game {
             else if (event.key.toLowerCase() === "w" && this.player.optionCursor - 1 >= 0) {
                 this.player.optionCursor -= 1;
             }
-    
+
             else if (event.key === "Enter") {
                 if (this.player.optionCursor == 1) {
                     pokemonOptions.style.display = "none";
@@ -161,7 +172,9 @@ export class Game {
         switchCursor.classList.add("cursor");
         document.getElementById("cursor-col")!.append(switchCursor);
 
-        document.getElementById("menu-text")!.innerText = 'Move POKéMON where?';
+        if (this.battle === undefined) {
+            document.getElementById("menu-text")!.innerText = 'Move POKéMON where?';
+        }
 
         if (event) {
             if (event.key.toLowerCase() === "s" && this.player.switchCursor + 1 < this.player.pokemon.length) {
@@ -179,6 +192,57 @@ export class Game {
         }
 
         switchCursor.style.top = `${64 + 64 * this.player.switchCursor}px`;
+    }
+
+    battleMenu(event?: KeyboardEvent) {
+        const battleMenu = document.getElementById("battle-menu")!;
+        battleMenu.style.display = "block";
+        battleMenu.innerHTML = "";
+
+        const battleCursor = document.createElement("div");
+        battleCursor.classList.add("cursor");
+        battleMenu.append(battleCursor);
+
+        if (event) {
+            if (event.key.toLowerCase() === 's') {
+                if (this.battle!.cursor == 0) this.battle!.cursor = 1;
+                else if (this.battle!.cursor == 2) this.battle!.cursor = 3;
+            }
+            else if (event.key.toLowerCase() === 'w') {
+                if (this.battle!.cursor == 1) this.battle!.cursor = 0;
+                else if (this.battle!.cursor == 3) this.battle!.cursor = 2;
+            }
+            else if (event.key.toLowerCase() === 'd') {
+                if (this.battle!.cursor == 0) this.battle!.cursor = 2;
+                else if (this.battle!.cursor == 1) this.battle!.cursor = 3;
+            }
+            else if (event.key.toLowerCase() === 'a') {
+                if (this.battle!.cursor == 2) this.battle!.cursor = 0;
+                else if (this.battle!.cursor == 3) this.battle!.cursor = 1;
+            }
+
+            else if (event.key === 'Enter') {
+                if (this.battle!.cursor == 2) {
+                    this.showMenu = "pokemon";
+                    this.changeMenu();
+                }
+                else if (this.battle!.cursor == 3) {
+                    this.showMenu = "";
+                    this.changeMenu();
+                    document.getElementById("battle-text")!.innerText = "Got away safely!";
+                    this.blockMovement = true;
+                    setTimeout(() => {
+                        this.battle = undefined;
+                        this.blockMovement = false;
+                        document.getElementById('battle-cont')!.style.display = "none";
+                        this.location.setSpawnCords(this.player.cords);
+                        this.spawnPokemon();
+                    }, 1500);
+                }
+            }
+        }
+
+        battleCursor.style = cursorStyles[this.battle!.cursor];
     }
 
     moveBack() {
@@ -269,57 +333,64 @@ export class Game {
 
     initControls() {
         document.body.addEventListener("keydown", async (event) => {
-            if (this.battle === undefined) {
-                if (!this.blockMovement && this.showMenu == "") {
-                    if (event.key.toLowerCase() === "w") {
-                        this.moveBack();
-                    }
-                    else if (event.key.toLowerCase() === "s") {
-                        this.moveFront();
-                    }
-                    else if (event.key.toLowerCase() === "a") {
-                        this.moveLeft();
-                    }
-                    else if (event.key.toLowerCase() === "d") {
-                        this.moveRight();
-                    }
-
-                    // console.log(this.player.cords.x, this.player.cords.y);
-
-                    setTimeout(() => {
-                        if (this.checkSpawn()) {
-                            // console.log('A wild pokemon appeard!');
-                            this.blockMovement = true;
-                            this.battle = new Battle(this.spawnPokemon(), this.player);
-                            this.battle.loadBattleScreen();
+            if (!this.blockMovement) {
+                if (this.battle === undefined) {
+                    if (!this.blockMovement && this.showMenu == "") {
+                        if (event.key.toLowerCase() === "w") {
+                            this.moveBack();
                         }
-                    }, 200);
-                }
-
-                if (event.key.toLowerCase() === "e") {
-                    if (this.showMenu == "") {
-                        this.player.cursor = 0;
-                        this.showMenu = "pokemon";
-                        this.changeMenu();
-                        // this.player.renderPokemon();
+                        else if (event.key.toLowerCase() === "s") {
+                            this.moveFront();
+                        }
+                        else if (event.key.toLowerCase() === "a") {
+                            this.moveLeft();
+                        }
+                        else if (event.key.toLowerCase() === "d") {
+                            this.moveRight();
+                        }
+    
+                        // console.log(this.player.cords.x, this.player.cords.y);
+    
+                        setTimeout(() => {
+                            if (this.checkSpawn()) {
+                                // console.log('A wild pokemon appeard!');
+                                this.battle = new Battle(this.spawnPokemon(), this.player);
+                                this.battle.loadBattleScreen();
+                                this.showMenu = "battle";
+                                this.changeMenu();
+                            }
+                        }, 200);
                     }
-                    else if (this.showMenu == "pokemon") {
-                        this.showMenu = "";
-                        this.changeMenu();
+    
+                    if (event.key.toLowerCase() === "e") {
+                        if (this.showMenu == "") {
+                            this.player.cursor = 0;
+                            this.showMenu = "pokemon";
+                            this.changeMenu();
+                            // this.player.renderPokemon();
+                        }
+                        else if (this.showMenu == "pokemon") {
+                            this.showMenu = "";
+                            this.changeMenu();
+                        }
                     }
                 }
-            }
-
-            if (this.showMenu == "pokemon") {
-                this.pokemonMenu(event);
-            }
-
-            else if (this.showMenu == "pokemon-options") {
-                this.pokemonMenuOpt(event);
-            }
-
-            else if (this.showMenu == "switch-pokemon") {
-                this.pokemonMenuSwitch(event);
+    
+                else {
+                    this.battleMenu(event);
+                }
+    
+                if (this.showMenu == "pokemon") {
+                    this.pokemonMenu(event);
+                }
+    
+                else if (this.showMenu == "pokemon-options") {
+                    this.pokemonMenuOpt(event);
+                }
+    
+                else if (this.showMenu == "switch-pokemon") {
+                    this.pokemonMenuSwitch(event);
+                }
             }
         });
     }
