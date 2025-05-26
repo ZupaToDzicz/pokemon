@@ -3,9 +3,11 @@ import { Location } from "./location";
 import { Pokemon } from "./pokemon";
 import { Battle } from "./battle";
 import framesData from "../data/frames.json"
+import movesDataJSON from '../data/moves.json'
 
 const frames: { [key: string]: { [key: string]: number } } = framesData;
 const playerFrames: { [key: string]: number } = frames['player-frames'];
+const movesData: { [key: string]: any } = movesDataJSON;
 
 const cursorStyles = [
     'top: 64px; left: 32px;',
@@ -81,7 +83,12 @@ export class Game {
             this.pokemonMenuSwitch();
         }
         else if (this.showMenu == "battle") {
+            this.battle!.cursor = 0;
             this.battleMenu();
+        }
+        else if (this.showMenu == "fight") {
+            this.battle!.cursor = 0;
+            this.fightMenu();
         }
         else if (this.showMenu == "") {
             document.getElementById("pokemon-menu")!.style.display = "none";
@@ -150,14 +157,21 @@ export class Game {
                         if (this.player.pokemon[this.player.cursor].isAlive()) {
                             this.showMenu = "";
                             this.changeMenu();
-                            this.battle.playerPokemon = this.player.pokemon[this.player.cursor];
-                            this.battle.loadBattleScreen();
 
-                            this.battle!.setText(`Let's go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
-                            setTimeout(() => {
+                            if (this.battle.playerPokemon == this.player.pokemon[this.player.cursor]) {
                                 this.showMenu = "battle";
                                 this.changeMenu();
-                            }, 1000);
+                            }
+                            else {
+                                this.battle.playerPokemon = this.player.pokemon[this.player.cursor];
+                                this.battle.loadBattleScreen();
+    
+                                this.battle!.setText(`Let's go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                                setTimeout(() => {
+                                    this.showMenu = "battle";
+                                    this.changeMenu();
+                                }, 1000);
+                            }
                         }
                     }
                 }
@@ -211,6 +225,7 @@ export class Game {
     }
 
     battleMenu(event?: KeyboardEvent) {
+        document.getElementById("fight-menu")!.style.display = "none";
         this.battle?.clearText();
         const battleMenu = document.getElementById("battle-menu")!;
         battleMenu.style.display = "block";
@@ -239,11 +254,21 @@ export class Game {
             }
 
             else if (event.key === 'Enter') {
-                if (this.battle!.cursor == 2) {
+                if (this.battle!.cursor == 0) {
+                    this.showMenu = "fight";
+                    this.changeMenu();
+                }
+
+                else if (this.battle!.cursor == 1) {
+
+                }
+
+                else if (this.battle!.cursor == 2) {
                     this.player.cursor = this.player.pokemon.indexOf(this.battle?.playerPokemon!);
                     this.showMenu = "pokemon";
                     this.changeMenu();
                 }
+
                 else if (this.battle!.cursor == 3) {
                     this.showMenu = "";
                     this.changeMenu();
@@ -261,6 +286,60 @@ export class Game {
         }
 
         battleCursor.style = cursorStyles[this.battle!.cursor];
+    }
+
+    fightMenu(event?: KeyboardEvent) {
+        this.battle?.clearText();
+        document.getElementById("battle-menu")!.style.display = "none";
+
+        const fightMenu = document.getElementById("fight-menu")!;
+        fightMenu.style.display = "block";
+        fightMenu.innerHTML = "";
+
+        const cursor = document.createElement("div");
+        cursor.classList.add("cursor");
+        fightMenu.append(cursor);
+
+        const movesCont = document.createElement("div");
+        movesCont.id = "moves-cont";
+        fightMenu.append(movesCont);
+        for (let i = 0; i < 4; i++) {
+            const move = document.createElement("p");
+            movesCont.append(move);
+
+            if (this.battle!.playerPokemon!.moves[i]) {
+                move.innerText = this.battle!.playerPokemon!.moves[i].name.toLocaleUpperCase();
+            }
+            else {
+                move.innerText = "-";
+            }
+        }
+        
+        if (event) {
+            if (event.key.toLowerCase() === "s" && this.battle!.cursor + 1 < this.battle!.playerPokemon!.moves.length) {
+                this.battle!.cursor += 1;
+            }
+            else if (event.key.toLowerCase() === "w" && this.battle!.cursor - 1 >= 0) {
+                this.battle!.cursor -= 1;
+            }
+
+            else if (event.key === "Enter") {
+                
+            }
+        }
+        
+        cursor.style.top = `${160 + this.battle!.cursor * 32}px`;
+        cursor.style.left = "160px";
+
+        const moveType = document.createElement("div");
+        moveType.id = "move-type";
+        fightMenu.append(moveType);
+        moveType.innerText = movesData[this.battle!.playerPokemon!.moves[this.battle!.cursor].name].type.toLocaleUpperCase();
+
+        const movePP = document.createElement("div");
+        movePP.id = "move-pp";
+        fightMenu.append(movePP);
+        movePP.innerText = `${this.battle!.playerPokemon!.moves[this.battle!.cursor].pp}/${movesData[this.battle!.playerPokemon!.moves[this.battle!.cursor].name].pp}`;
     }
 
     moveBack() {
@@ -404,6 +483,10 @@ export class Game {
 
                 if (this.showMenu == "battle") {
                     this.battleMenu(event);
+                }
+
+                else if (this.showMenu == "fight") {
+                    this.fightMenu(event);
                 }
 
                 else if (this.showMenu == "pokemon") {

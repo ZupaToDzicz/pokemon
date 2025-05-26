@@ -18,7 +18,7 @@ export class Player {
         this.img.src = "./src/gfx/player-sprite.png";
         this.cords = (x && y) ? { x: x, y: y } : { x: 0, y: 0 };
         this.walkingFrame = 1;
-        this.pokemon = [new Pokemon("charmander", 5), new Pokemon("caterpie", 69), new Pokemon("squirtle", 420), new Pokemon("bulbasaur", 66), new Pokemon("charmander", 1)];
+        this.pokemon = [new Pokemon("charmander", 5), new Pokemon("caterpie", 6), new Pokemon("squirtle", 69), new Pokemon("bulbasaur", 66), new Pokemon("charmander", 1)];
     }
 
     renderPlayer(frame: number) {

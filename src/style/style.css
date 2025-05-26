@@ -235,7 +235,6 @@ body {
 #battle-menu {
     width: 384px;
     height: 192px;
-    background: rgba(102, 51, 153, 0.428);
     background-image: url("../gfx/battle-menu.png");
     position: absolute;
     top: 416px;
@@ -243,4 +242,41 @@ body {
     display: none;
 }
 
-/* #f7e0f6 */
+#fight-menu {
+    width: 640px;
+    height: 320px;
+    position: absolute;
+    bottom: 32px;
+    background-image: url("../gfx/fight-menu.png");
+    display: none;
+    z-index: 10;
+}
+
+#moves-cont {
+    position: absolute;
+    height: 128px;
+    width: 384px;
+    top: 160px;
+    left: 192px;
+}
+
+#moves-cont p {
+    line-height: 32px;
+}
+
+#move-type {
+    height: 32px;
+    width: 256px;
+    position: absolute;
+    top: 64px;
+    left: 64px;
+}
+
+#move-pp {
+    width: 160px;
+    height: 32px;
+    position: absolute;
+    top: 96px;
+    left: 160px;
+    text-align: end;
+}

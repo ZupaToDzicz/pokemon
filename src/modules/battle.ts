@@ -37,6 +37,10 @@ export class Battle {
         battleCont.append(battleText);
         battleText.innerText = "";
 
+        const fightMenu = document.createElement("div");
+        fightMenu.id = "fight-menu";
+        battleCont.append(fightMenu);
+
         const wildPokemonImg = document.createElement("div");
         wildPokemonImg.id = "wild-pokemon-img";
         battleCont.append(wildPokemonImg);
