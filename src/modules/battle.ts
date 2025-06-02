@@ -97,4 +97,19 @@ export class Battle {
         const battleText = document.getElementById("battle-text")!;
         battleText.innerText = "";
     }
+
+    fight() {
+        let first: Pokemon, second: Pokemon;
+
+        if (this.playerPokemon!.speed >= this.wildPokemon.speed) {
+            first = this.playerPokemon!;
+            second = this.wildPokemon;
+        }
+        else {
+            first = this.wildPokemon;
+            second = this.playerPokemon!;
+        }
+
+        this.playerPokemon!.attackPokemon(this.wildPokemon, this.playerPokemon!.moves[this.cursor].name);
+    }
 }

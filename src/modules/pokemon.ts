@@ -1,8 +1,10 @@
 import pokemonData from '../data/pokemon.json'
 import movesDataJSON from '../data/moves.json'
+import typesData from '../data/types.json'
 
 const data: { [key: string]: any } = pokemonData;
 const movesData: { [key: string]: any } = movesDataJSON;
+const types: { [key: string]: { [key: string]: number } } = typesData;
 
 export class Pokemon {
     name: string;
@@ -121,6 +123,51 @@ moves: ${JSON.stringify(this.moves)}`)
     isAlive() {
         if (this.HP > 0) return true;
         else return false;
+    }
+
+    attackPokemon(target: Pokemon, moveName: string) {
+        const move = movesData[moveName];
+        console.log(move);
+        target.printStats();
+
+        if (Math.random() > move.accuracy) {
+            return [`${this.name.toLocaleUpperCase()}'s attack missed!`];
+        }
+
+        if (move.category == "physical") {
+            let A = this.attack;
+            let D = target.defense;
+            if (A > 255 || D > 255) {
+                A = Math.floor(A / 4);
+                D = Math.floor(D / 4);
+            }
+            if (D == 0) D = 1;
+
+            let STAB = 1;
+            if (this.type1 == move.type || (this.type2 && this.type2 == move.type))
+                STAB = 1.5;
+
+            let type1 = types[move.type][target.type1];
+            let type2 = target.type2 ? types[move.type][target.type2] : 1;
+
+            let random = Math.floor(Math.random() * (256 - 217) + 217) / 255;
+            
+            const damage = Math.floor((((((2 * this.level) / 5) + 2) * move.power * (A / D)) / 50 + 2) * STAB * type1 * type2 * random);
+
+            console.log("Damage: ", damage);
+
+            if (damage == 0) {
+                return [`${this.name.toLocaleUpperCase()}'s attack missed!`];
+            }
+
+            if (target.HP - damage < 0) {
+                target.HP = 0;
+            }
+            else {
+                target.HP -= damage;
+            }
+        }
+        target.printStats();
     }
 }
 

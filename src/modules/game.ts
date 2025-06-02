@@ -93,6 +93,7 @@ export class Game {
         else if (this.showMenu == "") {
             document.getElementById("pokemon-menu")!.style.display = "none";
             document.getElementById("battle-menu")!.style.display = "none";
+            document.getElementById("fight-menu")!.style.display = "none";
         }
     }
 
@@ -324,7 +325,9 @@ export class Game {
             }
 
             else if (event.key === "Enter") {
-                
+                this.battle!.fight();
+                this.showMenu = "battle";
+                this.changeMenu();
             }
         }
         
