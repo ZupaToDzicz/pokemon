@@ -83,6 +83,7 @@ export class Game {
             this.pokemonMenuSwitch();
         }
         else if (this.showMenu == "battle") {
+            document.getElementById("pokemon-menu")!.style.display = "none";
             this.battle!.cursor = 0;
             this.battleMenu();
         }
@@ -122,6 +123,12 @@ export class Game {
                 cursor.classList.add("cursor-outline");
                 this.player.optionCursor = 0;
                 this.player.switchCursor = 0;
+            }
+
+            else if (event.key === "Escape") {
+                if (this.battle) this.showMenu = "battle";
+                else this.showMenu = "";
+                this.changeMenu();
             }
         }
 
@@ -325,7 +332,19 @@ export class Game {
             }
 
             else if (event.key === "Enter") {
-                this.battle!.fight();
+                if (this.battle!.playerPokemon!.moves[this.battle!.cursor].pp > 0) {
+                    this.showMenu = "";
+                    this.changeMenu();
+
+                    this.battle!.fight().then(() => {
+                        this.battle!.clearText();
+                        this.showMenu = "battle";
+                        this.changeMenu();
+                    });
+                }
+            }
+
+            else if (event.key === "Escape") {
                 this.showMenu = "battle";
                 this.changeMenu();
             }

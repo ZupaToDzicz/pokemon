@@ -99,17 +99,43 @@ export class Battle {
     }
 
     fight() {
-        let first: Pokemon, second: Pokemon;
+        let playerMove = this.playerPokemon!.moves[this.cursor];
+        let wildMove = this.wildPokemon.moves[Math.floor(Math.random() * this.wildPokemon.moves.length)];
 
-        if (this.playerPokemon!.speed >= this.wildPokemon.speed) {
-            first = this.playerPokemon!;
-            second = this.wildPokemon;
-        }
-        else {
-            first = this.wildPokemon;
-            second = this.playerPokemon!;
-        }
+        return new Promise<void>((resolve) => {
+            if (this.playerPokemon!.speed >= this.wildPokemon.speed) {
+                this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} used ${playerMove.name.toLocaleUpperCase()}!`);
+                this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
+                playerMove.pp -= 1;
+    
+                setTimeout(() => {
+                    if (this.wildPokemon.isAlive()) {
+                        this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} used ${wildMove.name.toLocaleUpperCase()}!`);
+                        this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
+                    }
 
-        this.playerPokemon!.attackPokemon(this.wildPokemon, this.playerPokemon!.moves[this.cursor].name);
+                    setTimeout(() => {
+                        resolve();
+                    }, 2000);
+                }, 2000);
+            }
+    
+            else {
+                this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} used ${wildMove.name.toLocaleUpperCase()}!`);
+                this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
+                
+                setTimeout(() => {
+                    if (this.playerPokemon!.isAlive()) {
+                        this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} used ${playerMove.name.toLocaleUpperCase()}!`);
+                        this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
+                        playerMove.pp -= 1;
+                    }
+                    
+                    setTimeout(() => {
+                        resolve();
+                    }, 2000);
+                }, 2000);
+            }
+        })
     }
 }

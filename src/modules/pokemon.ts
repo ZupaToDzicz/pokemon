@@ -127,11 +127,9 @@ moves: ${JSON.stringify(this.moves)}`)
 
     attackPokemon(target: Pokemon, moveName: string) {
         const move = movesData[moveName];
-        console.log(move);
-        target.printStats();
 
         if (Math.random() > move.accuracy) {
-            return [`${this.name.toLocaleUpperCase()}'s attack missed!`];
+            return `${this.name.toLocaleUpperCase()}'s attack missed!`;
         }
 
         if (move.category == "physical") {
@@ -157,7 +155,7 @@ moves: ${JSON.stringify(this.moves)}`)
             console.log("Damage: ", damage);
 
             if (damage == 0) {
-                return [`${this.name.toLocaleUpperCase()}'s attack missed!`];
+                return `${this.name.toLocaleUpperCase()}'s attack missed!`;
             }
 
             if (target.HP - damage < 0) {
@@ -167,7 +165,6 @@ moves: ${JSON.stringify(this.moves)}`)
                 target.HP -= damage;
             }
         }
-        target.printStats();
     }
 }
 
