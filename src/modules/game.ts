@@ -173,7 +173,7 @@ export class Game {
                             else {
                                 this.battle.playerPokemon = this.player.pokemon[this.player.cursor];
                                 this.battle.loadBattleScreen();
-    
+
                                 this.battle!.setText(`Let's go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
                                 setTimeout(() => {
                                     this.showMenu = "battle";
@@ -322,7 +322,7 @@ export class Game {
                 move.innerText = "-";
             }
         }
-        
+
         if (event) {
             if (event.key.toLowerCase() === "s" && this.battle!.cursor + 1 < this.battle!.playerPokemon!.moves.length) {
                 this.battle!.cursor += 1;
@@ -335,12 +335,30 @@ export class Game {
                 if (this.battle!.playerPokemon!.moves[this.battle!.cursor].pp > 0) {
                     this.showMenu = "";
                     this.changeMenu();
+                    this.blockMovement = true;
 
-                    this.battle!.fight().then(() => {
-                        this.battle!.clearText();
-                        this.showMenu = "battle";
-                        this.changeMenu();
-                    });
+                    this.battle!.fight()
+                        .then(() => {
+                            this.battle!.clearText();
+                            this.showMenu = "battle";
+                            this.changeMenu();
+                        })
+                        .catch(() => {
+                            if (!this.battle!.wildPokemon.isAlive()) {
+                                this.showMenu = "";
+                                this.changeMenu();
+                                this.battle = undefined;
+                                this.blockMovement = false;
+                                document.getElementById('battle-cont')!.style.display = "none";
+                                this.location.setSpawnCords(this.player.cords);
+                                this.spawnPokemon();
+                            }
+
+                            else {
+                                
+                            }
+                        })
+                        .finally(() => { this.blockMovement = false; });
                 }
             }
 
@@ -349,7 +367,7 @@ export class Game {
                 this.changeMenu();
             }
         }
-        
+
         cursor.style.top = `${160 + this.battle!.cursor * 32}px`;
         cursor.style.left = "160px";
 

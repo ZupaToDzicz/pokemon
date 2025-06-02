@@ -9,7 +9,7 @@ export class Battle {
     mainMenu: string[] = ["fight", "pokemon", "item", "run"];
     cursor: number = 0;
     selectedOption: (string | undefined) = undefined;
-    
+
     constructor(pokemon: Pokemon, player: Player) {
         this.wildPokemon = pokemon;
         this.player = player;
@@ -21,7 +21,7 @@ export class Battle {
             i++;
         }
     }
-    
+
     loadBattleScreen() {
         const battleCont = document.getElementById('battle-cont')!;
         battleCont.style.display = "block";
@@ -102,38 +102,69 @@ export class Battle {
         let playerMove = this.playerPokemon!.moves[this.cursor];
         let wildMove = this.wildPokemon.moves[Math.floor(Math.random() * this.wildPokemon.moves.length)];
 
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
             if (this.playerPokemon!.speed >= this.wildPokemon.speed) {
                 this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} used ${playerMove.name.toLocaleUpperCase()}!`);
                 this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
                 playerMove.pp -= 1;
-    
+
                 setTimeout(() => {
                     if (this.wildPokemon.isAlive()) {
                         this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} used ${wildMove.name.toLocaleUpperCase()}!`);
                         this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
+
+                        setTimeout(() => {
+                            if (this.playerPokemon!.isAlive()) resolve();
+                            else {
+                                this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} fainted!`);
+
+                                setTimeout(() => {
+                                    reject();
+                                }, 2000);
+                            }
+                        }, 2000);
                     }
 
-                    setTimeout(() => {
-                        resolve();
-                    }, 2000);
+                    else {
+                        this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} was defeated!`);
+
+                        setTimeout(() => {
+                            reject();
+                        }, 2000);
+                    }
+
                 }, 2000);
             }
-    
+
             else {
                 this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} used ${wildMove.name.toLocaleUpperCase()}!`);
                 this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
-                
+
                 setTimeout(() => {
                     if (this.playerPokemon!.isAlive()) {
                         this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} used ${playerMove.name.toLocaleUpperCase()}!`);
                         this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
                         playerMove.pp -= 1;
+
+                        setTimeout(() => {
+                            if (this.wildPokemon.isAlive()) resolve();
+                            else {
+                                this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} was defeated!`);
+
+                                setTimeout(() => {
+                                    reject();
+                                }, 2000);
+                            }
+                        }, 2000);
                     }
-                    
-                    setTimeout(() => {
-                        resolve();
-                    }, 2000);
+
+                    else {
+                        this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} fainted!`);
+
+                        setTimeout(() => {
+                            reject();
+                        }, 2000);
+                    }
                 }, 2000);
             }
         })
