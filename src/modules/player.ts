@@ -76,7 +76,7 @@ export class Player {
             pokemonCont.append(HPBar);
 
             const HP = document.createElement("div");
-            HP.innerText = `${pkmn.HP}/${pkmn.maxHP}`;
+            HP.innerText = `${pkmn.HP}/${pkmn.max.HP}`;
             HP.style.justifyContent = "center";
             pokemonCont.append(HP);
         })

@@ -1,6 +1,7 @@
 import { Player } from "./player";
 import { Pokemon } from "./pokemon";
 
+const delay: number = 2000;
 
 export class Battle {
     wildPokemon: Pokemon;
@@ -84,7 +85,7 @@ export class Battle {
         const maxHPCont = document.createElement("div");
         maxHPCont.id = "max-hp-cont";
         maxHPCont.classList.add("pokemon-level");
-        maxHPCont.innerText = `${this.playerPokemon!.maxHP}`
+        maxHPCont.innerText = `${this.playerPokemon!.max.HP}`
         battleCont.append(maxHPCont);
     }
 
@@ -98,74 +99,90 @@ export class Battle {
         battleText.innerText = "";
     }
 
+    async showInfo(info: string) {
+        if (info != "") {
+            await new Promise<void>((resolve) => {
+                setTimeout(() => {
+                    this.setText(info);
+                    resolve()
+                }, delay);
+            })
+        }
+    } 
+
     fight() {
         let playerMove = this.playerPokemon!.moves[this.cursor];
         let wildMove = this.wildPokemon.moves[Math.floor(Math.random() * this.wildPokemon.moves.length)];
+        let attackInfo: string = "";
 
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>(async (resolve, reject) => {
             if (this.playerPokemon!.speed >= this.wildPokemon.speed) {
                 this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} used ${playerMove.name.toLocaleUpperCase()}!`);
-                this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
+                attackInfo = this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
                 playerMove.pp -= 1;
 
-                setTimeout(() => {
+                await this.showInfo(attackInfo);
+                setTimeout(async () => {
                     if (this.wildPokemon.isAlive()) {
-                        this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} used ${wildMove.name.toLocaleUpperCase()}!`);
-                        this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
+                        this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nused ${wildMove.name.toLocaleUpperCase()}!`);
+                        attackInfo = this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
 
+                        await this.showInfo(attackInfo);
                         setTimeout(() => {
                             if (this.playerPokemon!.isAlive()) resolve();
                             else {
-                                this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} fainted!`);
+                                this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} \nfainted!`);
 
                                 setTimeout(() => {
                                     reject();
-                                }, 2000);
+                                }, delay);
                             }
-                        }, 2000);
+                        }, delay);
                     }
 
                     else {
-                        this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} was defeated!`);
+                        this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nfainted!`);
 
                         setTimeout(() => {
                             reject();
-                        }, 2000);
+                        }, delay);
                     }
 
-                }, 2000);
+                }, delay);
             }
 
             else {
-                this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} used ${wildMove.name.toLocaleUpperCase()}!`);
-                this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
+                this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nused ${wildMove.name.toLocaleUpperCase()}!`);
+                attackInfo = this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
 
-                setTimeout(() => {
+                await this.showInfo(attackInfo);
+                setTimeout(async () => {
                     if (this.playerPokemon!.isAlive()) {
-                        this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} used ${playerMove.name.toLocaleUpperCase()}!`);
-                        this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
+                        this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} \nused ${playerMove.name.toLocaleUpperCase()}!`);
+                        attackInfo = this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
                         playerMove.pp -= 1;
 
+                        await this.showInfo(attackInfo);
                         setTimeout(() => {
                             if (this.wildPokemon.isAlive()) resolve();
                             else {
-                                this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} was defeated!`);
+                                this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nfainted!`);
 
                                 setTimeout(() => {
                                     reject();
-                                }, 2000);
+                                }, delay);
                             }
-                        }, 2000);
+                        }, delay);
                     }
 
                     else {
-                        this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} fainted!`);
+                        this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} \nfainted!`);
 
                         setTimeout(() => {
                             reject();
-                        }, 2000);
+                        }, delay);
                     }
-                }, 2000);
+                }, delay);
             }
         })
     }

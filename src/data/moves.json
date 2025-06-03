@@ -7,7 +7,7 @@
         "pp": 40,
         "effect": {
             "stat": "attack",
-            "target": -1
+            "stages": -1
         }
     },
     "tackle": {
@@ -62,7 +62,7 @@
         "pp": 30,
         "effect": {
             "stat": "defense",
-            "target": -1
+            "stages": -1
         }
     },
     "tail whip": {
@@ -73,7 +73,7 @@
         "pp": 30,
         "effect": {
             "stat": "defense",
-            "target": -1
+            "stages": -1
         }
     },
     "bubble": {
@@ -103,7 +103,7 @@
         "pp": 40,
         "effect": {
             "stat": "speed",
-            "target": -1
+            "stages": -1
         }
     }
 }

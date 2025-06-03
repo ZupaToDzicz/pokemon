@@ -352,13 +352,18 @@ export class Game {
                                 document.getElementById('battle-cont')!.style.display = "none";
                                 this.location.setSpawnCords(this.player.cords);
                                 this.spawnPokemon();
+                                this.player.pokemon.forEach(pkmn => {
+                                    pkmn.recoverStats();
+                                })
                             }
 
                             else {
-                                
+
                             }
                         })
-                        .finally(() => { this.blockMovement = false; });
+                        .finally(() => {
+                            this.blockMovement = false;
+                        });
                 }
             }
 

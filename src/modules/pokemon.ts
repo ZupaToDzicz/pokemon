@@ -1,10 +1,12 @@
 import pokemonData from '../data/pokemon.json'
 import movesDataJSON from '../data/moves.json'
 import typesData from '../data/types.json'
+import stagesData from '../data/stages.json'
 
 const data: { [key: string]: any } = pokemonData;
 const movesData: { [key: string]: any } = movesDataJSON;
 const types: { [key: string]: { [key: string]: number } } = typesData;
+const stages: { [key: string]: number } = stagesData;
 
 export class Pokemon {
     name: string;
@@ -20,13 +22,17 @@ export class Pokemon {
     speed: number;
     special: number;
 
-    maxHP: number;
-    maxAttack: number;
-    maxDefense: number;
-    maxSpeed: number;
-    maxSpecial: number;
+    max: { [key: string]: number };
 
     moves: { name: string, pp: number }[];
+
+    stages: { [key: string]: number } = {
+        "HP": 0,
+        "attack": 0,
+        "defense": 0,
+        "speed": 0,
+        "special": 0
+    }
 
     constructor(name: string, level: number) {
         this.name = name;
@@ -45,16 +51,18 @@ export class Pokemon {
         }
 
         this.HP = Math.ceil((2 * data[name].base.HP + 2 * this.iv.HP) * (level / 100) + level + 10);
-        this.maxHP = this.HP;
-
         this.attack = Math.ceil((2 * data[name].base.attack + 2 * this.iv.attack) * (level / 100) + 5);
-        this.maxAttack = this.attack;
         this.defense = Math.ceil((2 * data[name].base.defense + 2 * this.iv.defense) * (level / 100) + 5);
-        this.maxDefense = this.defense;
         this.speed = Math.ceil((2 * data[name].base.speed + 2 * this.iv.speed) * (level / 100) + 5);
-        this.maxSpeed = this.speed;
         this.special = Math.ceil((2 * data[name].base.special + 2 * this.iv.special) * (level / 100) + 5);
-        this.maxSpecial = this.special;
+
+        this.max = {
+            "HP": this.HP,
+            "attack": this.attack,
+            "defense": this.defense,
+            "speed": this.speed,
+            "special": this.special
+        }
 
         this.moves = [];
         data[name].moves.forEach((move: { name: string, level: number; }) => {
@@ -68,23 +76,31 @@ export class Pokemon {
         console.log(`name: ${this.name}
 level: ${this.level}
 type: ${this.type1} ${this.type2 ? "/ " + this.type2 : ""}
-HP: ${this.HP}/${this.maxHP}
-attack: ${this.attack}
-defense: ${this.defense}
-speed: ${this.speed}
-special: ${this.special}
+HP: ${this.HP}/${this.max.HP}
+attack: ${this.attack}/${this.max.attack}
+defense: ${this.defense}/${this.max.defense}
+speed: ${this.speed}/${this.max.speed}
+special: ${this.special}/${this.max.special}
 moves: ${JSON.stringify(this.moves)}`)
     }
 
     recoverStats() {
-        this.attack = this.maxAttack;
-        this.defense = this.maxDefense;
-        this.speed = this.maxSpeed;
-        this.special = this.maxSpecial;
+        this.attack = this.max.attack;
+        this.defense = this.max.defense;
+        this.speed = this.max.speed;
+        this.special = this.max.special;
+
+        this.stages = {
+            "HP": 0,
+            "attack": 0,
+            "defense": 0,
+            "speed": 0,
+            "special": 0
+        }
     }
 
     recoverHP() {
-        this.HP = this.maxHP;
+        this.HP = this.max.HP;
     }
 
     recoverPP() {
@@ -96,14 +112,14 @@ moves: ${JSON.stringify(this.moves)}`)
     levelUp() {
         this.level += 1;
 
-        const currentHP = Math.ceil(this.HP / this.maxHP);
-        this.maxHP = Math.ceil((2 * data[this.name].base.HP + 2 * this.iv.HP) * (this.level / 100) + this.level + 10);
-        this.HP = Math.ceil(this.maxHP * currentHP);
+        const currentHP = Math.ceil(this.HP / this.max.HP);
+        this.max.HP = Math.ceil((2 * data[this.name].base.HP + 2 * this.iv.HP) * (this.level / 100) + this.level + 10);
+        this.HP = Math.ceil(this.max.HP * currentHP);
 
-        this.maxAttack = Math.ceil((2 * data[this.name].base.attack + 2 * this.iv.attack) * (this.level / 100) + 5);
-        this.maxDefense = Math.ceil((2 * data[this.name].base.defense + 2 * this.iv.defense) * (this.level / 100) + 5);
-        this.maxSpeed = Math.ceil((2 * data[this.name].base.speed + 2 * this.iv.speed) * (this.level / 100) + 5);
-        this.maxSpecial = Math.ceil((2 * data[this.name].base.special + 2 * this.iv.special) * (this.level / 100) + 5);
+        this.max.attack = Math.ceil((2 * data[this.name].base.attack + 2 * this.iv.attack) * (this.level / 100) + 5);
+        this.max.defense = Math.ceil((2 * data[this.name].base.defense + 2 * this.iv.defense) * (this.level / 100) + 5);
+        this.max.speed = Math.ceil((2 * data[this.name].base.speed + 2 * this.iv.speed) * (this.level / 100) + 5);
+        this.max.special = Math.ceil((2 * data[this.name].base.special + 2 * this.iv.special) * (this.level / 100) + 5);
 
         data[this.name].moves.forEach((move: { name: string, level: number; }) => {
             if (move.level <= this.level && this.moves.every(e => { return e.name != move.name })) {
@@ -125,11 +141,11 @@ moves: ${JSON.stringify(this.moves)}`)
         else return false;
     }
 
-    attackPokemon(target: Pokemon, moveName: string) {
+    attackPokemon(target: Pokemon, moveName: string): string {
         const move = movesData[moveName];
 
         if (Math.random() > move.accuracy) {
-            return `${this.name.toLocaleUpperCase()}'s attack missed!`;
+            return `${this.name.toLocaleUpperCase()}'s \nattack missed!`;
         }
 
         if (move.category == "physical") {
@@ -149,13 +165,13 @@ moves: ${JSON.stringify(this.moves)}`)
             let type2 = target.type2 ? types[move.type][target.type2] : 1;
 
             let random = Math.floor(Math.random() * (256 - 217) + 217) / 255;
-            
+
             const damage = Math.floor((((((2 * this.level) / 5) + 2) * move.power * (A / D)) / 50 + 2) * STAB * type1 * type2 * random);
 
             console.log("Damage: ", damage);
 
             if (damage == 0) {
-                return `${this.name.toLocaleUpperCase()}'s attack missed!`;
+                return `${this.name.toLocaleUpperCase()}'s \nattack missed!`;
             }
 
             if (target.HP - damage < 0) {
@@ -164,7 +180,34 @@ moves: ${JSON.stringify(this.moves)}`)
             else {
                 target.HP -= damage;
             }
+
+            return "";
         }
+
+        else if (move.category == "status") {
+            type Stat = "HP" | "attack" | "defense" | "speed" | "special";
+            
+            if (move.effect.stages) {
+                const stat: Stat = move.effect.stat;
+                if (target.stages[stat] > -6) {
+                    target.stages[stat] += move.effect.stages;
+                    target[stat] = Math.ceil(stages[target.stages[stat]] * target.max[stat]);
+
+                    // target.printStats();
+                    // console.log(target.stages[stat]);
+                    
+                    return `${target.name.toLocaleUpperCase()}'s \n${stat.toLocaleUpperCase()} fell!`;
+                }
+
+                else {
+                    return `Nothing happened!`;
+                }
+            }
+
+            return "";
+        }
+
+        return "";
     }
 }
 
