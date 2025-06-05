@@ -23,10 +23,10 @@
         "power": null,
         "accuracy": 0.9,
         "pp": 10,
-        "effects": {
+        "effect": {
             "stat": "HP",
-            "target": "-(Math.floor(target.maxHP / 16) + 1)",
-            "self": "Math.floor(target.maxHP / 16) + 1"
+            "target": "-(Math.floor(target.max.HP / 16) + 1)",
+            "self": "Math.floor(target.max.HP / 16) + 1"
         }
     },
     "vine whip": {

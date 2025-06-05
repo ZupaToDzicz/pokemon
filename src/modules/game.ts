@@ -9,6 +9,7 @@ const frames: { [key: string]: { [key: string]: number } } = framesData;
 const playerFrames: { [key: string]: number } = frames['player-frames'];
 const movesData: { [key: string]: any } = movesDataJSON;
 
+const delay = 2000;
 const cursorStyles = [
     'top: 64px; left: 32px;',
     'top: 128px; left: 32px;',
@@ -153,16 +154,19 @@ export class Game {
             }
 
             else if (event.key === "Enter") {
-                if (this.player.optionCursor == 1) {
-                    this.player.optionCursor = 0;
-                    this.player.switchCursor = 0;
+                if (this.player.optionCursor == 1 && this.player.pokemon.length > 1) {
                     if (this.battle === undefined) {
+                        this.player.optionCursor = 0;
+                        this.player.switchCursor = 0;
                         pokemonOptions.style.display = "none";
                         this.showMenu = "switch-pokemon";
                         this.changeMenu();
                     }
                     else {
                         if (this.player.pokemon[this.player.cursor].isAlive()) {
+                            this.player.optionCursor = 0;
+                            this.player.switchCursor = 0;
+
                             this.showMenu = "";
                             this.changeMenu();
 
@@ -171,14 +175,24 @@ export class Game {
                                 this.changeMenu();
                             }
                             else {
-                                this.battle.playerPokemon = this.player.pokemon[this.player.cursor];
-                                this.battle.loadBattleScreen();
+                                let addDelay = 0;
+                                if (this.battle!.playerPokemon!.isAlive()) {
+                                    addDelay = 2000;
+                                    this.battle.loadBattleScreen();
+                                    this.battle!.setText(`Come back ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                                }
 
-                                this.battle!.setText(`Let's go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                                this.battle.playerPokemon = this.player.pokemon[this.player.cursor];
+
+                                setTimeout(() => {
+                                    this.battle!.loadBattleScreen();
+                                    this.battle!.setText(`Go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                                }, addDelay);
+
                                 setTimeout(() => {
                                     this.showMenu = "battle";
                                     this.changeMenu();
-                                }, 1000);
+                                }, delay + addDelay);
                             }
                         }
                     }
@@ -288,7 +302,7 @@ export class Game {
                         document.getElementById('battle-cont')!.style.display = "none";
                         this.location.setSpawnCords(this.player.cords);
                         this.spawnPokemon();
-                    }, 1500);
+                    }, delay);
                 }
             }
         }
@@ -345,20 +359,19 @@ export class Game {
                         })
                         .catch(() => {
                             if (!this.battle!.wildPokemon.isAlive()) {
-                                this.showMenu = "";
-                                this.changeMenu();
-                                this.battle = undefined;
-                                this.blockMovement = false;
-                                document.getElementById('battle-cont')!.style.display = "none";
-                                this.location.setSpawnCords(this.player.cords);
-                                this.spawnPokemon();
-                                this.player.pokemon.forEach(pkmn => {
-                                    pkmn.recoverStats();
-                                })
+                                this.endFight();
+                            }
+
+                            else if (!this.player.hasAlivePokemon()) {
+                                this.battle!.setText(`All of You POKéMON fainted!`)
+                                setTimeout(() => {
+                                    this.endFight();
+                                }, delay);
                             }
 
                             else {
-
+                                this.showMenu = "pokemon";
+                                this.changeMenu();
                             }
                         })
                         .finally(() => {
@@ -385,6 +398,19 @@ export class Game {
         movePP.id = "move-pp";
         fightMenu.append(movePP);
         movePP.innerText = `${this.battle!.playerPokemon!.moves[this.battle!.cursor].pp}/${movesData[this.battle!.playerPokemon!.moves[this.battle!.cursor].name].pp}`;
+    }
+
+    endFight() {
+        this.showMenu = "";
+        this.changeMenu();
+        this.battle = undefined;
+        this.blockMovement = false;
+        document.getElementById('battle-cont')!.style.display = "none";
+        this.location.setSpawnCords(this.player.cords);
+        this.spawnPokemon();
+        this.player.pokemon.forEach(pkmn => {
+            pkmn.recoverStats();
+        });
     }
 
     moveBack() {
@@ -494,20 +520,20 @@ export class Game {
                         // console.log(this.player.cords.x, this.player.cords.y);
 
                         setTimeout(() => {
-                            if (this.checkSpawn()) {
+                            if (this.checkSpawn() && this.player.hasAlivePokemon()) {
                                 // console.log('A wild pokemon appeard!');
                                 this.battle = new Battle(this.spawnPokemon(), this.player);
                                 this.battle.loadBattleScreen();
                                 this.battle.setText(`Wild ${this.battle.wildPokemon.name.toLocaleUpperCase()} appeared!`);
 
                                 setTimeout(() => {
-                                    this.battle!.setText(`Let's go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
-                                }, 1000);
+                                    this.battle!.setText(`Go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                                }, delay / 2);
 
                                 setTimeout(() => {
                                     this.showMenu = "battle";
                                     this.changeMenu();
-                                }, 2000);
+                                }, delay);
                             }
                         }, 200);
                     }

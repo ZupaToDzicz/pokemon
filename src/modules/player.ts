@@ -18,7 +18,9 @@ export class Player {
         this.img.src = "./src/gfx/player-sprite.png";
         this.cords = (x && y) ? { x: x, y: y } : { x: 0, y: 0 };
         this.walkingFrame = 1;
-        this.pokemon = [new Pokemon("charmander", 5), new Pokemon("caterpie", 6), new Pokemon("squirtle", 69), new Pokemon("bulbasaur", 66), new Pokemon("charmander", 1)];
+        this.pokemon = [new Pokemon("charmander", 1), new Pokemon("bulbasaur", 5)];
+
+        this.pokemon.forEach(pkmn => { pkmn.isWild = false });
     }
 
     renderPlayer(frame: number) {
@@ -93,5 +95,11 @@ export class Player {
     switchPokemon(p1: number, p2: number) {
         if (p1 == p2) return;
         [this.pokemon[p1], this.pokemon[p2]] = [this.pokemon[p2], this.pokemon[p1]];
+    }
+
+    hasAlivePokemon() {
+        if (this.pokemon.some(pkmn => { return pkmn.isAlive() }))
+            return true;
+        return false;
     }
 }

@@ -15,6 +15,7 @@ export class Pokemon {
     type1: string;
     type2?: string;
     iv: { [key: string]: number };
+    isWild: boolean = true;
 
     HP: number;
     attack: number;
@@ -145,12 +146,17 @@ moves: ${JSON.stringify(this.moves)}`)
         const move = movesData[moveName];
 
         if (Math.random() > move.accuracy) {
-            return `${this.name.toLocaleUpperCase()}'s \nattack missed!`;
+            return `${this.isWild ? "Enemy " : ""}${this.name.toLocaleUpperCase()}'s \nattack missed!`;
         }
 
-        if (move.category == "physical") {
+        if (move.category == "physical" || move.category == "special") {
             let A = this.attack;
             let D = target.defense;
+            if (move.category == "special") {
+                A = this.special;
+                D = target.special;
+            }
+
             if (A > 255 || D > 255) {
                 A = Math.floor(A / 4);
                 D = Math.floor(D / 4);
@@ -171,7 +177,7 @@ moves: ${JSON.stringify(this.moves)}`)
             console.log("Damage: ", damage);
 
             if (damage == 0) {
-                return `${this.name.toLocaleUpperCase()}'s \nattack missed!`;
+                return `${this.isWild ? "Enemy " : ""}${this.name.toLocaleUpperCase()}'s \nattack missed!`;
             }
 
             if (target.HP - damage < 0) {
@@ -196,11 +202,25 @@ moves: ${JSON.stringify(this.moves)}`)
                     // target.printStats();
                     // console.log(target.stages[stat]);
                     
-                    return `${target.name.toLocaleUpperCase()}'s \n${stat.toLocaleUpperCase()} fell!`;
+                    return `${target.isWild ? "Enemy " : ""}${target.name.toLocaleUpperCase()}'s \n${stat.toLocaleUpperCase()} fell!`;
                 }
 
                 else {
                     return `Nothing happened!`;
+                }
+            }
+
+            else if (move.effect.target) {
+                const stat: Stat = move.effect.stat;
+                target[stat] += eval(move.effect.target);
+
+                if (move.effect.self) {
+                    if (stat == "HP" && this.HP + eval(move.effect.self) > this.max.HP) {
+                        this.HP = this.max.HP;
+                    }
+                    else {
+                        this[stat] += eval(move.effect.self);
+                    }
                 }
             }
 
