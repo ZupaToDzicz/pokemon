@@ -73,9 +73,19 @@ export class Player {
             level.innerHTML = `<img src="src/gfx/level.png">${pkmn.level}`;
             pokemonCont.append(level);
 
-            const HPBar = new Image();
-            HPBar.src = "src/gfx/hp-bar.png";
-            pokemonCont.append(HPBar);
+            const HPBarCont = document.createElement("div");
+            HPBarCont.classList.add("hp-bar-cont");
+            pokemonCont.append(HPBarCont);
+
+            const HPBar = document.createElement("div");
+            HPBar.classList.add("hp-bar");
+            const HPPercent = pkmn.HP / pkmn.max.HP;
+            HPBar.style.width = `${Math.round(HPPercent * 192)}px`;
+            if (HPPercent <= 0.25)
+                HPBar.style.background = "#c33b25";
+            else if (HPPercent <= 0.5)
+                HPBar.style.background = "#c49009";
+            HPBarCont.append(HPBar);
 
             const HP = document.createElement("div");
             HP.innerText = `${pkmn.HP}/${pkmn.max.HP}`;

@@ -159,6 +159,35 @@ body {
     left: 480px;
 }
 
+.hp-bar-cont {
+    position: relative;
+    width: 320px;
+    height: 32px;
+    background-image: url("../gfx/hp-bar.png");
+}
+
+.hp-bar {
+    width: 192px;
+    height: 8px;
+    background: #48a058;
+    position: absolute;
+    transform-origin: left center;
+    top: 12px;
+    left: 96px;
+}
+
+#wild-pokemon-hp-bar {
+    position: absolute;
+    top: 96px;
+    left: 32px;
+}
+
+#player-pokemon-hp-bar {
+    position: absolute;
+    top: 320px;
+    right: 32px;
+}
+
 #pokemon-menu {
     width: 100%;
     height: 100%;

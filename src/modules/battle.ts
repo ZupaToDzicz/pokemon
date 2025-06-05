@@ -64,6 +64,22 @@ export class Battle {
         wildPokemonLevel.innerHTML = `<img src="src/gfx/level.png">${this.wildPokemon.level}`;
         battleCont.append(wildPokemonLevel);
 
+        const wildPokemonHPBar = document.createElement("div");
+        wildPokemonHPBar.id = "wild-pokemon-hp-bar";
+        wildPokemonHPBar.classList.add("hp-bar-cont");
+        battleCont.append(wildPokemonHPBar);
+
+        const wildPokemonHP = document.createElement("div");
+        wildPokemonHP.id = "wild-pokemon-hp";
+        wildPokemonHP.classList.add("hp-bar");
+        const wildHPPercent = this.wildPokemon.HP / this.wildPokemon.max.HP;
+        wildPokemonHP.style.width = `${Math.round(wildHPPercent * 192)}px`;
+        if (wildHPPercent <= 0.25)
+            wildPokemonHP.style.background = "#c33b25";
+        else if (wildHPPercent <= 0.5)
+            wildPokemonHP.style.background = "#c49009";
+        wildPokemonHPBar.append(wildPokemonHP);
+
         const playerPokemonName = document.createElement("div");
         playerPokemonName.id = "player-pokemon-name";
         playerPokemonName.classList.add("pokemon-name");
@@ -75,6 +91,22 @@ export class Battle {
         playerPokemonLevel.classList.add("pokemon-level");
         playerPokemonLevel.innerHTML = `<img src="src/gfx/level.png">${this.playerPokemon!.level}`;
         battleCont.append(playerPokemonLevel);
+
+        const playerPokemonHPBar = document.createElement("div");
+        playerPokemonHPBar.id = "player-pokemon-hp-bar";
+        playerPokemonHPBar.classList.add("hp-bar-cont");
+        battleCont.append(playerPokemonHPBar);
+
+        const playerPokemonHP = document.createElement("div");
+        playerPokemonHP.id = "player-pokemon-hp";
+        playerPokemonHP.classList.add("hp-bar");
+        const playerHPPercent = this.playerPokemon!.HP / this.playerPokemon!.max.HP;
+        playerPokemonHP.style.width = `${Math.round(playerHPPercent * 192)}px`;
+        if (playerHPPercent <= 0.25)
+            playerPokemonHP.style.background = "#c33b25";
+        else if (playerHPPercent <= 0.5)
+            playerPokemonHP.style.background = "#c49009";
+        playerPokemonHPBar.append(playerPokemonHP);
 
         const HPCont = document.createElement("div");
         HPCont.id = "hp-cont";
@@ -108,7 +140,26 @@ export class Battle {
                 }, delay);
             })
         }
-    } 
+    }
+
+    dropHPAnim(wildPokemon: boolean) {
+        let HPColor = "#48a058", HPPercent;
+        if (wildPokemon) {
+            HPPercent = this.wildPokemon.HP / this.wildPokemon.max.HP;
+            if (HPPercent <= 0.25) HPColor = "#c33b25";
+            else if (HPPercent <= 0.5) HPColor = "#c49009";
+
+            document.getElementById("wild-pokemon-hp")?.animate({ width: `${Math.round(HPPercent * 192)}px`, background: HPColor }, { duration: 1000, fill: "forwards" });
+        }
+
+        else {
+            HPPercent = this.playerPokemon!.HP / this.playerPokemon!.max.HP;
+            if (HPPercent <= 0.25) HPColor = "#c33b25";
+            else if (HPPercent <= 0.5) HPColor = "#c49009";
+
+            document.getElementById("player-pokemon-hp")?.animate({ width: `${Math.round(HPPercent * 192)}px`, background: HPColor }, { duration: 1000, fill: "forwards" });
+        }
+    }
 
     fight() {
         let playerMove = this.playerPokemon!.moves[this.cursor];
@@ -120,12 +171,14 @@ export class Battle {
                 this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} used ${playerMove.name.toLocaleUpperCase()}!`);
                 attackInfo = this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
                 playerMove.pp -= 1;
+                this.dropHPAnim(true);
 
                 await this.showInfo(attackInfo);
                 setTimeout(async () => {
                     if (this.wildPokemon.isAlive()) {
                         this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nused ${wildMove.name.toLocaleUpperCase()}!`);
                         attackInfo = this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
+                        this.dropHPAnim(false);
 
                         await this.showInfo(attackInfo);
                         setTimeout(() => {
@@ -154,6 +207,7 @@ export class Battle {
             else {
                 this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nused ${wildMove.name.toLocaleUpperCase()}!`);
                 attackInfo = this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
+                this.dropHPAnim(false);
 
                 await this.showInfo(attackInfo);
                 setTimeout(async () => {
@@ -161,6 +215,7 @@ export class Battle {
                         this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} \nused ${playerMove.name.toLocaleUpperCase()}!`);
                         attackInfo = this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
                         playerMove.pp -= 1;
+                        this.dropHPAnim(true);
 
                         await this.showInfo(attackInfo);
                         setTimeout(() => {

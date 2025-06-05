@@ -413,6 +413,10 @@ export class Game {
         });
     }
 
+    itemMenu(event?: KeyboardEvent) {
+        
+    }
+
     moveBack() {
         if (this.player.walkingFrame == 1) {
             this.player.walkingFrame += 1;
