@@ -106,6 +106,7 @@ body {
     position: absolute;
     top: 192px;
     left: 32px;
+    transform-origin: bottom center;
 }
 
 .pokemon-name {
@@ -123,8 +124,8 @@ body {
 }
 
 #player-pokemon-name {
-    top: 256px;
-    left: 320px;
+    top: 0px;
+    left: 32px;
 }
 
 .pokemon-level {
@@ -142,21 +143,21 @@ body {
 }
 
 #player-pokemon-level {
-    top: 288px;
-    left: 448px
+    top: 32px;
+    left: 160px
 }
 
 #hp-cont {
     justify-content: end;
     align-items: center;
-    top: 352px;
-    left: 352px;
+    top: 96px;
+    left: 64px;
 }
 
 #max-hp-cont {
     align-items: center;
-    top: 352px;
-    left: 480px;
+    top: 96px;
+    left: 192px;
 }
 
 .hp-bar-cont {
@@ -184,7 +185,7 @@ body {
 
 #player-pokemon-hp-bar {
     position: absolute;
-    top: 320px;
+    top: 64px;
     right: 32px;
 }
 
@@ -308,4 +309,31 @@ body {
     top: 96px;
     left: 160px;
     text-align: end;
+}
+
+#wild-pokemon-interface {
+    width: 352px;
+    height: 148px;
+    position: absolute;
+    background-image: url("../gfx/wild-pokemon-interface.png");
+}
+
+#player-pokemon-interface {
+    width: 352px;
+    height: 148px;
+    position: absolute;
+    top: 256px;
+    right: 0;
+    background-image: url("../gfx/player-pokemon-interface.png");
+}
+
+#animation-cloud {
+    width: 256px;
+    height: 288px;
+    position: absolute;
+    top: 192px;
+    left: 32px;
+    background-position: top;
+    background-repeat: no-repeat;
+    z-index: 100;
 }

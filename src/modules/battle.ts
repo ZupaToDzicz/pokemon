@@ -50,24 +50,52 @@ export class Battle {
         const playerImg = document.createElement("div");
         playerImg.id = "player-img";
         battleCont.append(playerImg);
+        playerImg.style.backgroundImage = `url(./src/gfx/player-back.png)`;
+
+        const animationCloud = document.createElement("div");
+        animationCloud.id = "animation-cloud";
+        battleCont.append(animationCloud);
+
+        const wildInterface = document.createElement("div");
+        wildInterface.id = "wild-pokemon-interface";
+        battleCont.append(wildInterface);
+        wildInterface.style.display = "none";
+
+        const playerInterface = document.createElement("div");
+        playerInterface.id = "player-pokemon-interface";
+        battleCont.append(playerInterface);
+        playerInterface.style.display = "none";
+    }
+
+    updateBattleScreen() {
+        const wildInterface = document.getElementById("wild-pokemon-interface")!;
+        wildInterface.innerHTML = "";
+        wildInterface.style.display = "block";
+
+        const playerInterface = document.getElementById("player-pokemon-interface")!;
+        playerInterface.innerHTML = "";
+        playerInterface.style.display = "block";
+
+        const playerImg = document.getElementById("player-img")!;
         playerImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.playerPokemon!.name}.png)`;
 
         const wildPokemonName = document.createElement("div");
         wildPokemonName.id = "wild-pokemon-name";
         wildPokemonName.classList.add("pokemon-name");
         wildPokemonName.innerText = this.wildPokemon.name;
-        battleCont.append(wildPokemonName);
+        wildInterface.append(wildPokemonName);
 
         const wildPokemonLevel = document.createElement("div");
         wildPokemonLevel.id = "wild-pokemon-level";
         wildPokemonLevel.classList.add("pokemon-level");
         wildPokemonLevel.innerHTML = `<img src="src/gfx/level.png">${this.wildPokemon.level}`;
-        battleCont.append(wildPokemonLevel);
+        wildInterface.append(wildPokemonLevel);
 
         const wildPokemonHPBar = document.createElement("div");
         wildPokemonHPBar.id = "wild-pokemon-hp-bar";
         wildPokemonHPBar.classList.add("hp-bar-cont");
-        battleCont.append(wildPokemonHPBar);
+        wildPokemonHPBar.classList.add("fight-hp-bar");
+        wildInterface.append(wildPokemonHPBar);
 
         const wildPokemonHP = document.createElement("div");
         wildPokemonHP.id = "wild-pokemon-hp";
@@ -84,18 +112,19 @@ export class Battle {
         playerPokemonName.id = "player-pokemon-name";
         playerPokemonName.classList.add("pokemon-name");
         playerPokemonName.innerText = this.playerPokemon!.name;
-        battleCont.append(playerPokemonName);
+        playerInterface.append(playerPokemonName);
 
         const playerPokemonLevel = document.createElement("div");
         playerPokemonLevel.id = "player-pokemon-level";
         playerPokemonLevel.classList.add("pokemon-level");
         playerPokemonLevel.innerHTML = `<img src="src/gfx/level.png">${this.playerPokemon!.level}`;
-        battleCont.append(playerPokemonLevel);
+        playerInterface.append(playerPokemonLevel);
 
         const playerPokemonHPBar = document.createElement("div");
         playerPokemonHPBar.id = "player-pokemon-hp-bar";
         playerPokemonHPBar.classList.add("hp-bar-cont");
-        battleCont.append(playerPokemonHPBar);
+        playerPokemonHPBar.classList.add("fight-hp-bar");
+        playerInterface.append(playerPokemonHPBar);
 
         const playerPokemonHP = document.createElement("div");
         playerPokemonHP.id = "player-pokemon-hp";
@@ -112,13 +141,13 @@ export class Battle {
         HPCont.id = "hp-cont";
         HPCont.classList.add("pokemon-level");
         HPCont.innerText = `${this.playerPokemon!.HP}`;
-        battleCont.append(HPCont);
+        playerInterface.append(HPCont);
 
         const maxHPCont = document.createElement("div");
         maxHPCont.id = "max-hp-cont";
         maxHPCont.classList.add("pokemon-level");
         maxHPCont.innerText = `${this.playerPokemon!.max.HP}`;
-        battleCont.append(maxHPCont);
+        playerInterface.append(maxHPCont);
     }
 
     setText(text: string) {

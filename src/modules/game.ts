@@ -4,6 +4,7 @@ import { Pokemon } from "./pokemon";
 import { Battle } from "./battle";
 import framesData from "../data/frames.json"
 import movesDataJSON from '../data/moves.json'
+import { playerSlide, wildPokemonSlide, pokemonOut, pokemonOutCloud, playerSlideOut } from "./animation";
 
 const frames: { [key: string]: { [key: string]: number } } = framesData;
 const playerFrames: { [key: string]: number } = frames['player-frames'];
@@ -178,14 +179,14 @@ export class Game {
                                 let addDelay = 0;
                                 if (this.battle!.playerPokemon!.isAlive()) {
                                     addDelay = 2000;
-                                    this.battle.loadBattleScreen();
+                                    this.battle.updateBattleScreen();
                                     this.battle!.setText(`Come back ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
                                 }
 
                                 this.battle.playerPokemon = this.player.pokemon[this.player.cursor];
 
                                 setTimeout(() => {
-                                    this.battle!.loadBattleScreen();
+                                    this.battle!.updateBattleScreen();
                                     this.battle!.setText(`Go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
                                 }, addDelay);
 
@@ -414,7 +415,7 @@ export class Game {
     }
 
     itemMenu(event?: KeyboardEvent) {
-        
+
     }
 
     moveBack() {
@@ -525,19 +526,41 @@ export class Game {
 
                         setTimeout(() => {
                             if (this.checkSpawn() && this.player.hasAlivePokemon()) {
-                                // console.log('A wild pokemon appeard!');
                                 this.battle = new Battle(this.spawnPokemon(), this.player);
                                 this.battle.loadBattleScreen();
-                                this.battle.setText(`Wild ${this.battle.wildPokemon.name.toLocaleUpperCase()} appeared!`);
+                                const playerImg = document.getElementById("player-img")!;
+
+                                playerImg.animate(playerSlide, { duration: delay - 250 });
+                                document.getElementById("wild-pokemon-img")?.animate(wildPokemonSlide, { duration: delay - 250 });
 
                                 setTimeout(() => {
-                                    this.battle!.setText(`Go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
-                                }, delay / 2);
+                                    this.battle!.setText(`Wild ${this.battle!.wildPokemon.name.toLocaleUpperCase()} appeared!`);
+                                }, delay);
+
+                                setTimeout(() => {
+                                    playerImg.animate(playerSlideOut, { duration: 500 });
+
+                                    setTimeout(() => {
+                                        playerImg.style.backgroundImage = "none";
+                                    }, 450);
+
+                                    setTimeout(() => {
+                                        this.battle!.setText(`Go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                                        document.getElementById("animation-cloud")?.animate(pokemonOutCloud, { duration: 500, delay: 500 });
+
+                                        setTimeout(() => {
+                                            playerImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.battle!.playerPokemon!.name}.png)`;
+                                            playerImg.animate(pokemonOut, { duration: 200 })
+
+                                            this.battle!.updateBattleScreen();
+                                        }, 1100);
+                                    }, 600);
+                                }, delay * 2);
 
                                 setTimeout(() => {
                                     this.showMenu = "battle";
                                     this.changeMenu();
-                                }, delay);
+                                }, delay * 4);
                             }
                         }, 200);
                     }
