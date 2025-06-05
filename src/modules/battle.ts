@@ -111,13 +111,13 @@ export class Battle {
         const HPCont = document.createElement("div");
         HPCont.id = "hp-cont";
         HPCont.classList.add("pokemon-level");
-        HPCont.innerText = `${this.playerPokemon!.HP}`
+        HPCont.innerText = `${this.playerPokemon!.HP}`;
         battleCont.append(HPCont);
 
         const maxHPCont = document.createElement("div");
         maxHPCont.id = "max-hp-cont";
         maxHPCont.classList.add("pokemon-level");
-        maxHPCont.innerText = `${this.playerPokemon!.max.HP}`
+        maxHPCont.innerText = `${this.playerPokemon!.max.HP}`;
         battleCont.append(maxHPCont);
     }
 
@@ -158,6 +158,20 @@ export class Battle {
             else if (HPPercent <= 0.5) HPColor = "#c49009";
 
             document.getElementById("player-pokemon-hp")?.animate({ width: `${Math.round(HPPercent * 192)}px`, background: HPColor }, { duration: 1000, fill: "forwards" });
+
+            const HPCont = document.getElementById("hp-cont")!;
+            let prevHP = Number(HPCont.innerText);
+            let diff = prevHP - this.playerPokemon!.HP;
+            console.log(HPCont, prevHP, diff, this.playerPokemon!.HP);
+
+            if (diff > 0) {
+                for (let i = 0; i < diff; i++) {
+                    setTimeout(() => {
+                        prevHP -= 1;
+                        HPCont.innerText = prevHP.toString();
+                    }, i * (1000 / diff));
+                }
+            }
         }
     }
 
