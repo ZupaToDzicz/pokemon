@@ -26,3 +26,28 @@ export const pokemonOut = [
     { transform: "scale(0)" },
     { transform: "scale(1)" }
 ]
+
+export const playerPokemonAttack = [
+    { transform: "translateX(32px)" },
+    { transform: "translateX(-32px)" }
+]
+
+export const wildPokemonAttack = [
+    { transform: "translateX(-16px)" },
+    { transform: "translateX(16px)" }
+]
+
+export const playerPokemonDamage = [
+    { transform: "translateY(0)" },
+    { transform: "translateY(16px)" },
+    { transform: "translateY(-16px)" },
+    { transform: "translateY(16px)" },
+    { transform: "translateY(0)" }
+]
+
+export const wildPokemonDamage = [
+    { opacity: 0 },
+    { opacity: 1 },
+    { opacity: 0 },
+    { opacity: 1 }
+]

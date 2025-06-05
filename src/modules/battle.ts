@@ -1,8 +1,8 @@
 import { Player } from "./player";
 import { Pokemon } from "./pokemon";
-import { pokemonOut, pokemonOutCloud } from "./animation";
+import { pokemonOut, pokemonOutCloud, playerPokemonAttack, wildPokemonAttack, wildPokemonDamage, playerPokemonDamage } from "./animation";
 
-const delay: number = 2000;
+const delay: number = 3000;
 
 export class Battle {
     wildPokemon: Pokemon;
@@ -161,39 +161,6 @@ export class Battle {
         battleText.innerText = "";
     }
 
-    async pokemonOutAnimation() {
-        const pokemonImg = document.getElementById("player-img")!;
-        await new Promise<void>((resolve) => {
-            this.setText(`Go ${this.playerPokemon!.name.toLocaleUpperCase()}!`);
-            document.getElementById("animation-cloud")?.animate(pokemonOutCloud, { duration: 500, delay: 500 });
-
-            setTimeout(() => {
-                pokemonImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.playerPokemon!.name}.png)`;
-                pokemonImg.animate(pokemonOut, { duration: 200 })
-
-                this.updateBattleScreen();
-                resolve();
-            }, 1100);
-        })
-    }
-
-    async pokemonInAnimation() {
-        const pokemonImg = document.getElementById("player-img")!;
-        await new Promise<void>((resolve) => {
-            this.setText(`Come back ${this.playerPokemon!.name.toLocaleUpperCase()}!`);
-
-            setTimeout(() => {
-                pokemonImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.playerPokemon!.name}.png)`;
-                pokemonImg.animate(pokemonOut, { duration: 200, direction: "reverse" });
-                
-                setTimeout(() => {
-                    pokemonImg.style.backgroundImage = "none";
-                }, 180);
-                resolve();
-            }, 500);
-        })
-    }
-
     async showInfo(info: string) {
         if (info != "") {
             await new Promise<void>((resolve) => {
@@ -238,6 +205,48 @@ export class Battle {
         }
     }
 
+    async pokemonOutAnimation() {
+        const pokemonImg = document.getElementById("player-img")!;
+        pokemonImg.style.backgroundImage = "none";
+        await new Promise<void>((resolve) => {
+            this.setText(`Go ${this.playerPokemon!.name.toLocaleUpperCase()}!`);
+            document.getElementById("animation-cloud")?.animate(pokemonOutCloud, { duration: 500, delay: 500 });
+
+            setTimeout(() => {
+                pokemonImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.playerPokemon!.name}.png)`;
+                pokemonImg.animate(pokemonOut, { duration: 200 })
+
+                this.updateBattleScreen();
+                resolve();
+            }, 1100);
+        })
+    }
+
+    async pokemonInAnimation() {
+        const pokemonImg = document.getElementById("player-img")!;
+        await new Promise<void>((resolve) => {
+            setTimeout(() => {
+                pokemonImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.playerPokemon!.name}.png)`;
+                pokemonImg.animate(pokemonOut, { duration: 200, direction: "reverse" });
+
+                setTimeout(() => {
+                    pokemonImg.style.backgroundImage = "none";
+                }, 180);
+                resolve();
+            }, 500);
+        })
+    }
+
+    playerPokemonAttack() {
+        document.getElementById("player-img")!.animate(playerPokemonAttack, { duration: 300, easing: "steps(2)" });
+        document.getElementById("wild-pokemon-img")!.animate(wildPokemonDamage, { duration: 300, easing: "steps(3)" });
+    }
+
+    wildPokemonAttack() {
+        document.getElementById("wild-pokemon-img")!.animate(wildPokemonAttack, { duration: 300, easing: "steps(2)", direction: "reverse" });
+        document.getElementById("pf")!.animate(playerPokemonDamage, { duration: 400, easing: "steps(5)" });
+    }
+
     fight() {
         let playerMove = this.playerPokemon!.moves[this.cursor];
         let wildMove = this.wildPokemon.moves[Math.floor(Math.random() * this.wildPokemon.moves.length)];
@@ -250,6 +259,10 @@ export class Battle {
                 playerMove.pp -= 1;
                 this.dropHPAnim(true);
 
+                if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!") {
+                    this.playerPokemonAttack();
+                }
+
                 await this.showInfo(attackInfo);
                 setTimeout(async () => {
                     if (this.wildPokemon.isAlive()) {
@@ -257,11 +270,16 @@ export class Battle {
                         attackInfo = this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
                         this.dropHPAnim(false);
 
+                        if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!") {
+                            this.wildPokemonAttack();
+                        }
+
                         await this.showInfo(attackInfo);
-                        setTimeout(() => {
+                        setTimeout(async () => {
                             if (this.playerPokemon!.isAlive()) resolve();
                             else {
                                 this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} \nfainted!`);
+                                await this.pokemonInAnimation();
 
                                 setTimeout(() => {
                                     reject();
@@ -286,6 +304,10 @@ export class Battle {
                 attackInfo = this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
                 this.dropHPAnim(false);
 
+                if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!") {
+                    this.wildPokemonAttack();
+                }
+
                 await this.showInfo(attackInfo);
                 setTimeout(async () => {
                     if (this.playerPokemon!.isAlive()) {
@@ -293,6 +315,10 @@ export class Battle {
                         attackInfo = this.playerPokemon!.attackPokemon(this.wildPokemon, playerMove.name);
                         playerMove.pp -= 1;
                         this.dropHPAnim(true);
+
+                        if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!") {
+                            this.playerPokemonAttack();
+                        }
 
                         await this.showInfo(attackInfo);
                         setTimeout(() => {
@@ -309,6 +335,7 @@ export class Battle {
 
                     else {
                         this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} \nfainted!`);
+                        await this.pokemonInAnimation();
 
                         setTimeout(() => {
                             reject();

@@ -179,6 +179,7 @@ export class Game {
                                 let addDelay = 0;
                                 if (this.battle!.playerPokemon!.isAlive()) {
                                     addDelay = 1000;
+                                    this.battle!.setText(`Come back ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
                                     await this.battle.pokemonInAnimation();
                                 }
 
