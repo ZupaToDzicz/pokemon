@@ -1,5 +1,6 @@
 import { Player } from "./player";
 import { Pokemon } from "./pokemon";
+import { pokemonOut, pokemonOutCloud } from "./animation";
 
 const delay: number = 2000;
 
@@ -158,6 +159,39 @@ export class Battle {
     clearText() {
         const battleText = document.getElementById("battle-text")!;
         battleText.innerText = "";
+    }
+
+    async pokemonOutAnimation() {
+        const pokemonImg = document.getElementById("player-img")!;
+        await new Promise<void>((resolve) => {
+            this.setText(`Go ${this.playerPokemon!.name.toLocaleUpperCase()}!`);
+            document.getElementById("animation-cloud")?.animate(pokemonOutCloud, { duration: 500, delay: 500 });
+
+            setTimeout(() => {
+                pokemonImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.playerPokemon!.name}.png)`;
+                pokemonImg.animate(pokemonOut, { duration: 200 })
+
+                this.updateBattleScreen();
+                resolve();
+            }, 1100);
+        })
+    }
+
+    async pokemonInAnimation() {
+        const pokemonImg = document.getElementById("player-img")!;
+        await new Promise<void>((resolve) => {
+            this.setText(`Come back ${this.playerPokemon!.name.toLocaleUpperCase()}!`);
+
+            setTimeout(() => {
+                pokemonImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.playerPokemon!.name}.png)`;
+                pokemonImg.animate(pokemonOut, { duration: 200, direction: "reverse" });
+                
+                setTimeout(() => {
+                    pokemonImg.style.backgroundImage = "none";
+                }, 180);
+                resolve();
+            }, 500);
+        })
     }
 
     async showInfo(info: string) {

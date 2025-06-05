@@ -4,7 +4,7 @@ import { Pokemon } from "./pokemon";
 import { Battle } from "./battle";
 import framesData from "../data/frames.json"
 import movesDataJSON from '../data/moves.json'
-import { playerSlide, wildPokemonSlide, pokemonOut, pokemonOutCloud, playerSlideOut } from "./animation";
+import { playerSlide, wildPokemonSlide, playerSlideOut } from "./animation";
 
 const frames: { [key: string]: { [key: string]: number } } = framesData;
 const playerFrames: { [key: string]: number } = frames['player-frames'];
@@ -137,7 +137,7 @@ export class Game {
         cursor.style.top = `${64 + 64 * this.player.cursor}px`;
     }
 
-    pokemonMenuOpt(event?: KeyboardEvent) {
+    async pokemonMenuOpt(event?: KeyboardEvent) {
         document.getElementById("cursor-col-opt")!.innerHTML = '';
         const pokemonOptions = document.getElementById("pokemon-options")!;
         pokemonOptions.style.display = "block";
@@ -178,16 +178,14 @@ export class Game {
                             else {
                                 let addDelay = 0;
                                 if (this.battle!.playerPokemon!.isAlive()) {
-                                    addDelay = 2000;
-                                    this.battle.updateBattleScreen();
-                                    this.battle!.setText(`Come back ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                                    addDelay = 1000;
+                                    await this.battle.pokemonInAnimation();
                                 }
 
                                 this.battle.playerPokemon = this.player.pokemon[this.player.cursor];
 
-                                setTimeout(() => {
-                                    this.battle!.updateBattleScreen();
-                                    this.battle!.setText(`Go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
+                                setTimeout(async () => {
+                                    await this.battle!.pokemonOutAnimation();
                                 }, addDelay);
 
                                 setTimeout(() => {
@@ -544,23 +542,15 @@ export class Game {
                                         playerImg.style.backgroundImage = "none";
                                     }, 450);
 
-                                    setTimeout(() => {
-                                        this.battle!.setText(`Go ${this.battle!.playerPokemon!.name.toLocaleUpperCase()}!`);
-                                        document.getElementById("animation-cloud")?.animate(pokemonOutCloud, { duration: 500, delay: 500 });
-
-                                        setTimeout(() => {
-                                            playerImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.battle!.playerPokemon!.name}.png)`;
-                                            playerImg.animate(pokemonOut, { duration: 200 })
-
-                                            this.battle!.updateBattleScreen();
-                                        }, 1100);
+                                    setTimeout(async () => {
+                                        await this.battle!.pokemonOutAnimation();
                                     }, 600);
                                 }, delay * 2);
 
                                 setTimeout(() => {
                                     this.showMenu = "battle";
                                     this.changeMenu();
-                                }, delay * 4);
+                                }, delay * 3.5);
                             }
                         }, 200);
                     }
