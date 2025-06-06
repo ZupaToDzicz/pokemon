@@ -86,6 +86,7 @@ export class Game {
         }
         else if (this.showMenu == "battle") {
             document.getElementById("pokemon-menu")!.style.display = "none";
+            document.getElementById("item-menu")!.style.display = "none";
             this.battle!.cursor = 0;
             this.battleMenu();
         }
@@ -93,10 +94,19 @@ export class Game {
             this.battle!.cursor = 0;
             this.fightMenu();
         }
+        else if (this.showMenu == "item") {
+            this.battle!.cursor = 0;
+            this.itemMenu();
+        }
         else if (this.showMenu == "") {
-            document.getElementById("pokemon-menu")!.style.display = "none";
-            document.getElementById("battle-menu")!.style.display = "none";
-            document.getElementById("fight-menu")!.style.display = "none";
+            if (document.getElementById("pokemon-menu") !== null)
+                document.getElementById("pokemon-menu")!.style.display = "none";
+            if (document.getElementById("item-menu") !== null)
+                document.getElementById("item-menu")!.style.display = "none";
+            if (document.getElementById("battle-menu") !== null)
+                document.getElementById("battle-menu")!.style.display = "none";
+            if (document.getElementById("fight-menu") !== null)
+                document.getElementById("fight-menu")!.style.display = "none";
         }
     }
 
@@ -248,6 +258,7 @@ export class Game {
 
     battleMenu(event?: KeyboardEvent) {
         document.getElementById("fight-menu")!.style.display = "none";
+        document.getElementById("item-menu")!.style.display = "none";
         this.battle?.clearText();
         const battleMenu = document.getElementById("battle-menu")!;
         battleMenu.style.display = "block";
@@ -282,7 +293,8 @@ export class Game {
                 }
 
                 else if (this.battle!.cursor == 1) {
-
+                    this.showMenu = "item";
+                    this.changeMenu();
                 }
 
                 else if (this.battle!.cursor == 2) {
@@ -364,6 +376,7 @@ export class Game {
 
                             else if (!this.player.hasAlivePokemon()) {
                                 this.battle!.setText(`All of You POKéMON fainted!`)
+                                document.getElementById("player-pokemon-interface")!.style.display = "none";
                                 setTimeout(() => {
                                     this.endFight();
                                 }, delay);
@@ -413,8 +426,40 @@ export class Game {
         });
     }
 
-    itemMenu(event?: KeyboardEvent) {
+    async itemMenu(event?: KeyboardEvent) {
+        document.getElementById("battle-menu")!.style.display = "none";
+        const itemMenu = document.getElementById("item-menu")!;
+        itemMenu.style.display = "block";
+        itemMenu.innerHTML = "";
 
+        const cursor = document.createElement("div");
+        cursor.classList.add("cursor");
+        itemMenu.append(cursor);
+
+        if (event) {
+            if (event.key.toLowerCase() === "s" && this.battle!.cursor == 0) {
+                this.battle!.cursor = 1;
+            }
+            else if (event.key.toLowerCase() === "w" && this.battle!.cursor == 1) {
+                this.battle!.cursor = 0;
+            }
+            else if (event.key === "Enter") {
+                if (this.battle!.cursor == 0) {
+                    this.showMenu = "";
+                    this.changeMenu();
+                    await this.battle!.throwPokeballAnimation();
+                    this.battle!.throwPokeball();
+                }
+                else {
+                    this.battle!.cursor = 0;
+                    this.showMenu = "battle";
+                    this.changeMenu();
+                }
+            }
+        }
+
+        cursor.style.top = `${64 + this.battle!.cursor * 64}px`;
+        cursor.style.left = "32px";
     }
 
     moveBack() {
@@ -576,6 +621,10 @@ export class Game {
 
                 else if (this.showMenu == "fight") {
                     this.fightMenu(event);
+                }
+
+                else if (this.showMenu == "item") {
+                    this.itemMenu(event);
                 }
 
                 else if (this.showMenu == "pokemon") {

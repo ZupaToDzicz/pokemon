@@ -98,6 +98,7 @@ body {
     position: absolute;
     left: 384px;
     top: 32px;
+    transform-origin: bottom center;
 }
 
 #player-img {
@@ -327,13 +328,41 @@ body {
     background-image: url("../gfx/player-pokemon-interface.png");
 }
 
-#animation-cloud {
+#item-menu {
+    width: 512px;
+    height: 352px;
+    background-image: url("../gfx/item-menu.png");
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    top: 96px;
+}
+
+.cloud {
     width: 256px;
     height: 288px;
     position: absolute;
-    top: 192px;
-    left: 32px;
     background-position: top;
     background-repeat: no-repeat;
     z-index: 100;
+}
+
+#player-cloud {
+    top: 192px;
+    left: 32px;
+}
+
+#wild-cloud {
+    right: 32px;
+    top: 32px;
+}
+
+#pokeball {
+    width: 64px;
+    height: 64px;
+    background-image: url("../gfx/pokeball/front.png");
+    position: absolute;
+    z-index: 10;
+    top: 192px;
+    left: 448px;
 }

@@ -1,6 +1,6 @@
 import { Player } from "./player";
 import { Pokemon } from "./pokemon";
-import { pokemonOut, pokemonOutCloud, playerPokemonAttack, wildPokemonAttack, wildPokemonDamage, playerPokemonDamage } from "./animation";
+import { pokemonOut, pokemonOutCloud, playerPokemonAttack, wildPokemonAttack, wildPokemonDamage, playerPokemonDamage, throwPokeball } from "./animation";
 
 const delay: number = 3000;
 
@@ -41,7 +41,18 @@ export class Battle {
 
         const fightMenu = document.createElement("div");
         fightMenu.id = "fight-menu";
+        fightMenu.style.display = "none";
         battleCont.append(fightMenu);
+
+        const itemMenu = document.createElement("div");
+        itemMenu.id = "item-menu";
+        itemMenu.style.display = "none";
+        battleCont.append(itemMenu);
+
+        const pokeball = document.createElement("div");
+        pokeball.id = "pokeball";
+        pokeball.style.display = "none";
+        battleCont.append(pokeball);
 
         const wildPokemonImg = document.createElement("div");
         wildPokemonImg.id = "wild-pokemon-img";
@@ -53,9 +64,15 @@ export class Battle {
         battleCont.append(playerImg);
         playerImg.style.backgroundImage = `url(./src/gfx/player-back.png)`;
 
-        const animationCloud = document.createElement("div");
-        animationCloud.id = "animation-cloud";
-        battleCont.append(animationCloud);
+        const playerCloud = document.createElement("div");
+        playerCloud.classList.add("cloud");
+        playerCloud.id = "player-cloud";
+        battleCont.append(playerCloud);
+
+        const wildCloud = document.createElement("div");
+        wildCloud.classList.add("cloud");
+        wildCloud.id = "wild-cloud";
+        battleCont.append(wildCloud);
 
         const wildInterface = document.createElement("div");
         wildInterface.id = "wild-pokemon-interface";
@@ -210,7 +227,7 @@ export class Battle {
         pokemonImg.style.backgroundImage = "none";
         await new Promise<void>((resolve) => {
             this.setText(`Go ${this.playerPokemon!.name.toLocaleUpperCase()}!`);
-            document.getElementById("animation-cloud")?.animate(pokemonOutCloud, { duration: 500, delay: 500 });
+            document.getElementById("player-cloud")?.animate(pokemonOutCloud, { duration: 500, delay: 500 });
 
             setTimeout(() => {
                 pokemonImg.style.backgroundImage = `url(./src/gfx/pokemon-back/${this.playerPokemon!.name}.png)`;
@@ -234,6 +251,40 @@ export class Battle {
                 }, 180);
                 resolve();
             }, 500);
+        })
+    }
+
+    async pokemonFainted() {
+        const pokemonImg = document.getElementById("wild-pokemon-img")!;
+        await new Promise<void>((resolve) => {
+            setTimeout(() => {
+                pokemonImg.animate(pokemonOut, { duration: 200, direction: "reverse" });
+
+                setTimeout(() => {
+                    pokemonImg.style.backgroundImage = "none";
+                }, 180);
+                resolve();
+            }, 500);
+        })
+    }
+
+    async throwPokeballAnimation() {
+        this.setText("You used\n POKé BALL!");
+        const pokeball = document.getElementById("pokeball")!;
+        pokeball.style.display = "block";
+        pokeball.animate(throwPokeball, { duration: 500 });
+        setTimeout(() => {
+            pokeball.style.display = "none";
+        }, 500);
+        document.getElementById("wild-cloud")?.animate(pokemonOutCloud, { duration: 500, delay: 500 });
+
+        await new Promise<void>((resolve) => {
+            const pokemonImg = document.getElementById("wild-pokemon-img")!;
+            setTimeout(() => {
+                pokemonImg.style.backgroundImage = "none";
+                pokeball.style.display = "block";
+                resolve();
+            }, 1050);
         })
     }
 
@@ -290,6 +341,8 @@ export class Battle {
 
                     else {
                         this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nfainted!`);
+                        document.getElementById("wild-pokemon-interface")!.style.display = "none";
+                        this.pokemonFainted();
 
                         setTimeout(() => {
                             reject();
@@ -325,6 +378,8 @@ export class Battle {
                             if (this.wildPokemon.isAlive()) resolve();
                             else {
                                 this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nfainted!`);
+                                document.getElementById("wild-pokemon-interface")!.style.display = "none";
+                                this.pokemonFainted();
 
                                 setTimeout(() => {
                                     reject();
@@ -344,5 +399,28 @@ export class Battle {
                 }, delay);
             }
         })
+    }
+
+    throwPokeball(): boolean {
+        const r1 = Math.floor(Math.random() * 256);
+        if (this.wildPokemon.catchRate < r1)
+            return false;
+
+        const f = this.wildPokemon.calcHPFactor();
+        const r2 = Math.floor(Math.random() * 256);
+        if (r2 <= f)
+            return true;
+        return false;
+    }
+
+    wobbleBall(): number {
+        const f = this.wildPokemon.calcHPFactor();
+        let w = this.wildPokemon.catchRate * 100;
+        w = Math.floor((Math.floor(w / 255) * f) / 255);
+
+        if (w < 10) return 0;
+        else if (w >= 10 && w <= 29) return 1;
+        else if (w >= 30 && w <= 69) return 2;
+        else return 3;
     }
 }

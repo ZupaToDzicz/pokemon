@@ -51,3 +51,17 @@ export const wildPokemonDamage = [
     { opacity: 0 },
     { opacity: 1 }
 ]
+
+export const throwPokeball = [
+    { top: "320px", left: "128px" },
+    { top: "272px", left: "160px" },
+    { top: "224px", left: "192px" },
+    { top: "192px", left: "224px" },
+    { top: "160px", left: "256px" },
+    { top: "128px", left: "288px" },
+    { top: "96px", left: "320px" },
+    { top: "96px", left: "352px" },
+    { top: "112px", left: "384px" },
+    { top: "144px", left: "416px" },
+    { top: "176px", left: "448px" }
+]

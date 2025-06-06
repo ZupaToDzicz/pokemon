@@ -16,6 +16,7 @@ export class Pokemon {
     type2?: string;
     iv: { [key: string]: number };
     isWild: boolean = true;
+    catchRate: number;
 
     HP: number;
     attack: number;
@@ -42,6 +43,7 @@ export class Pokemon {
 
         this.type1 = data[name].type1;
         if (data[name].type2) this.type2 = data[name].type2;
+        this.catchRate = data[name].catchRate;
 
         this.iv = {
             "HP": Math.floor(Math.random() * 16),
@@ -228,6 +230,16 @@ moves: ${JSON.stringify(this.moves)}`)
         }
 
         return "";
+    }
+
+    calcHPFactor(): number {
+        let f = Math.floor((this.max.HP * 255) / 12);
+        let f2 = Math.floor(this.HP / 4);
+        if (f2 == 0) f2 = 1;
+        f = Math.floor(f / f2);
+        if (f > 255) f = 255;
+
+        return f;
     }
 }
 
