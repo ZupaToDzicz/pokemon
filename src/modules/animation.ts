@@ -65,3 +65,11 @@ export const throwPokeball = [
     { top: "144px", left: "416px" },
     { top: "176px", left: "448px" }
 ]
+
+export const wobblePokeball = [
+    { background: "url('src/gfx/pokeball/front.png')" },
+    { background: "url('src/gfx/pokeball/left.png')" },
+    { background: "url('src/gfx/pokeball/front.png')" },
+    { background: "url('src/gfx/pokeball/right.png')" },
+    { background: "url('src/gfx/pokeball/front.png')" }
+]

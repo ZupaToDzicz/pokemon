@@ -1,6 +1,6 @@
 import { Player } from "./player";
 import { Pokemon } from "./pokemon";
-import { pokemonOut, pokemonOutCloud, playerPokemonAttack, wildPokemonAttack, wildPokemonDamage, playerPokemonDamage, throwPokeball } from "./animation";
+import { pokemonOut, pokemonOutCloud, playerPokemonAttack, wildPokemonAttack, wildPokemonDamage, playerPokemonDamage, throwPokeball, wobblePokeball } from "./animation";
 
 const delay: number = 3000;
 
@@ -279,12 +279,48 @@ export class Battle {
         document.getElementById("wild-cloud")?.animate(pokemonOutCloud, { duration: 500, delay: 500 });
 
         await new Promise<void>((resolve) => {
-            const pokemonImg = document.getElementById("wild-pokemon-img")!;
             setTimeout(() => {
-                pokemonImg.style.backgroundImage = "none";
+                document.getElementById("wild-pokemon-img")!.style.backgroundImage = "none";
                 pokeball.style.display = "block";
                 resolve();
             }, 1050);
+        })
+    }
+
+    async wobbleAnimation(count: number, caught: boolean) {
+        const pokeball = document.getElementById("pokeball")!;
+        pokeball.style.display = "block";
+        for (let i = 0; i < count; i++) {
+            pokeball.animate(wobblePokeball, { duration: 500, delay: 1000 * i });
+        }
+
+        await new Promise<void>((resolve) => {
+            setTimeout(() => {
+                if (caught) {
+                    pokeball.style.backgroundImage = "url('src/gfx/pokeball/caught.png')";
+                    this.setText(`${this.wildPokemon.name.toLocaleUpperCase()} was caught!`);
+                }
+
+                else {
+                    pokeball.style.display = "none";
+                    document.getElementById("wild-cloud")?.animate(pokemonOutCloud, { duration: 500 });
+
+                    setTimeout(() => {
+                        document.getElementById("wild-pokemon-img")!.style.backgroundImage = `url('src/gfx/pokemon-front-1/${this.wildPokemon.name}.png')`;
+                    }, 500);
+
+                    if (count == 0)
+                        this.setText("The ball missed the POKéMON!");
+                    else if (count == 1)
+                        this.setText("Darn! The POKéMON broke free!");
+                    else if (count == 2)
+                        this.setText("Aww! It appeared to be caught!");
+                    else if (count == 3)
+                        this.setText("Shoot! It was so close too!");
+                }
+
+                setTimeout(() => { resolve(); }, delay);
+            }, 1000 * (count - 1) + 500);
         })
     }
 
@@ -417,6 +453,8 @@ export class Battle {
         const f = this.wildPokemon.calcHPFactor();
         let w = this.wildPokemon.catchRate * 100;
         w = Math.floor((Math.floor(w / 255) * f) / 255);
+
+        console.log(w);
 
         if (w < 10) return 0;
         else if (w >= 10 && w <= 29) return 1;

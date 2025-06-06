@@ -443,12 +443,32 @@ export class Game {
             else if (event.key.toLowerCase() === "w" && this.battle!.cursor == 1) {
                 this.battle!.cursor = 0;
             }
+
             else if (event.key === "Enter") {
                 if (this.battle!.cursor == 0) {
+                    this.blockMovement = true;
                     this.showMenu = "";
                     this.changeMenu();
                     await this.battle!.throwPokeballAnimation();
-                    this.battle!.throwPokeball();
+
+                    const caught = this.battle!.throwPokeball();
+                    if (caught) {
+                        await this.battle!.wobbleAnimation(3, true);
+                        this.battle!.wildPokemon.isWild = false;
+                        if (this.player.pokemon.length < 6) {
+                            this.player.pokemon.push(this.battle!.wildPokemon);
+                        }
+                        this.endFight();
+                        this.blockMovement = false;
+                    }
+
+                    else {
+                        const wobble = this.battle!.wobbleBall();
+                        await this.battle!.wobbleAnimation(wobble, false);
+                        this.showMenu = "battle";
+                        this.changeMenu();
+                        this.blockMovement = false;
+                    }
                 }
                 else {
                     this.battle!.cursor = 0;
@@ -458,8 +478,10 @@ export class Game {
             }
         }
 
-        cursor.style.top = `${64 + this.battle!.cursor * 64}px`;
-        cursor.style.left = "32px";
+        if (this.battle !== undefined) {
+            cursor.style.top = `${64 + this.battle!.cursor * 64}px`;
+            cursor.style.left = "32px";
+        }
     }
 
     moveBack() {
