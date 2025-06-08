@@ -131,5 +131,228 @@
                 "level": 1
             }
         ]
+    },
+    "weedle": {
+        "id": 13,
+        "base": {
+            "HP": 40,
+            "attack": 35,
+            "defense": 30,
+            "speed": 50,
+            "special": 20,
+            "exp": 39
+        },
+        "type1": "bug",
+        "type2": "poison",
+        "catchRate": 255,
+        "entry": "Often found in forests, eating leaves. It has a sharp venomous stinger on its head.",
+        "height": "0.3 m",
+        "weight": "3.2 kg",
+        "menuIcon": 6,
+        "moves": [
+            {
+                "name": "poison sting",
+                "level": 1
+            },
+            {
+                "name": "string shot",
+                "level": 1
+            }
+        ]
+    },
+    "pidgey": {
+        "id": 16,
+        "base": {
+            "HP": 40,
+            "attack": 45,
+            "defense": 40,
+            "speed": 56,
+            "special": 35,
+            "exp": 50
+        },
+        "type1": "normal",
+        "type2": "flying",
+        "catchRate": 255,
+        "entry": "A common sight in forests and woods. It flaps its wings at ground level to kick up blinding sand.",
+        "height": "0.3 m",
+        "weight": "1.8 kg",
+        "menuIcon": 4,
+        "moves": [
+            {
+                "name": "gust",
+                "level": 1
+            },
+            {
+                "name": "sand attack",
+                "level": 5
+            },
+            {
+                "name": "quick attack",
+                "level": 12
+            },
+            {
+                "name": "wing attack",
+                "level": 15
+            }
+        ]
+    },
+    "rattata": {
+        "id": 19,
+        "base": {
+            "HP": 30,
+            "attack": 56,
+            "defense": 35,
+            "speed": 72,
+            "special": 25,
+            "exp": 51
+        },
+        "type1": "normal",
+        "catchRate": 255,
+        "entry": "Bites anything when it attacks. Small and very quick, it is a common sight in many places.",
+        "height": "0.3 m",
+        "weight": "3.5 kg",
+        "menuIcon": 9,
+        "moves": [
+            {
+                "name": "tackle",
+                "level": 1
+            },
+            {
+                "name": "tail whip",
+                "level": 1
+            },
+            {
+                "name": "quick attack",
+                "level": 7
+            },
+            {
+                "name": "hyper fang",
+                "level": 14
+            }
+        ]
+    },
+    "spearow": {
+        "id": 21,
+        "base": {
+            "HP": 40,
+            "attack": 60,
+            "defense": 30,
+            "speed": 70,
+            "special": 31,
+            "exp": 52
+        },
+        "type1": "normal",
+        "type2": "flying",
+        "catchRate": 255,
+        "entry": "Eats bugs in grassy areas. It has to flap its short wings at high speed to stay airborne.",
+        "height": "0.3 m",
+        "weight": "2.0 kg",
+        "menuIcon": 4,
+        "moves": [
+            {
+                "name": "growl",
+                "level": 1
+            },
+            {
+                "name": "peck",
+                "level": 1
+            },
+            {
+                "name": "leer",
+                "level": 9
+            },
+            {
+                "name": "fury attack",
+                "level": 15
+            }
+        ]
+    },
+    "oddish": {
+        "id": 43,
+        "base": {
+            "HP": 45,
+            "attack": 50,
+            "defense": 55,
+            "speed": 30,
+            "special": 75,
+            "exp": 64
+        },
+        "type1": "grass",
+        "type2": "poison",
+        "catchRate": 255,
+        "entry": "During the day, it keeps its face buried in the ground. At night, it wanders around sowing its seeds.",
+        "height": "0.5 m",
+        "weight": "5.4 kg",
+        "menuIcon": 7,
+        "moves": [
+            {
+                "name": "absorb",
+                "level": 1
+            },
+            {
+                "name": "acid",
+                "level": 15
+            }
+        ]
+    },
+    "venonat": {
+        "id": 48,
+        "base": {
+            "HP": 60,
+            "attack": 55,
+            "defense": 50,
+            "speed": 45,
+            "special": 40,
+            "exp": 61
+        },
+        "type1": "bug",
+        "type2": "poison",
+        "catchRate": 190,
+        "entry": "Lives in the shadows of tall trees where it eats insects. It is attracted by light at night.",
+        "height": "1.0 m",
+        "weight": "30.0 kg",
+        "menuIcon": 6,
+        "moves": [
+            {
+                "name": "tackle",
+                "level": 1
+            },
+            {
+                "name": "leech life",
+                "level": 1
+            }
+        ]
+    },
+    "bellsprout": {
+        "id": 69,
+        "base": {
+            "HP": 50,
+            "attack": 75,
+            "defense": 35,
+            "speed": 40,
+            "special": 70,
+            "exp": 60
+        },
+        "type1": "grass",
+        "type2": "poison",
+        "catchRate": 255,
+        "entry": "A carnivorous POKéMON that traps and eats bugs. It uses its root feet to soak up needed moisture.",
+        "height": "0.7 m",
+        "weight": "4.0 kg",
+        "menuIcon": 7,
+        "moves": [
+            {
+                "name": "vine whip",
+                "level": 1
+            },
+            {
+                "name": "growth",
+                "level": 7
+            },
+            {
+                "name": "wrap",
+                "level": 11
+            }
+        ]
     }
 }

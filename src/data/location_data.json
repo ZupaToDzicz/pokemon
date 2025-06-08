@@ -5,7 +5,14 @@
             "y": 48
         },
         "pokemon": [
-            "caterpie"
+            "caterpie",
+            "weedle",
+            "pidgey",
+            "rattata",
+            "spearow",
+            "oddish",
+            "venonat",
+            "bellsprout"
         ],
         "level": {
             "min": 3,

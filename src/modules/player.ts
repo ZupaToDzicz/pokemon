@@ -18,7 +18,7 @@ export class Player {
         this.img.src = "./src/gfx/player-sprite.png";
         this.cords = (x && y) ? { x: x, y: y } : { x: 0, y: 0 };
         this.walkingFrame = 1;
-        this.pokemon = [new Pokemon("charmander", 1), new Pokemon("bulbasaur", 5)];
+        this.pokemon = [new Pokemon("bellsprout", 10)];
 
         this.pokemon.forEach(pkmn => { pkmn.isWild = false });
     }

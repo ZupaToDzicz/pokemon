@@ -179,7 +179,7 @@ export class Battle {
     }
 
     async showInfo(info: string) {
-        if (info != "") {
+        if (info != "" && info != "self") {
             await new Promise<void>((resolve) => {
                 setTimeout(() => {
                     this.setText(info);
@@ -189,7 +189,7 @@ export class Battle {
         }
     }
 
-    dropHPAnim(wildPokemon: boolean) {
+    dropHPAnim(wildPokemon: boolean, gain?: boolean) {
         let HPColor = "#48a058", HPPercent;
         if (wildPokemon) {
             HPPercent = this.wildPokemon.HP / this.wildPokemon.max.HP;
@@ -208,13 +208,16 @@ export class Battle {
 
             const HPCont = document.getElementById("hp-cont")!;
             let prevHP = Number(HPCont.innerText);
-            let diff = prevHP - this.playerPokemon!.HP;
+            let diff
+            if (gain) diff = this.playerPokemon!.HP - prevHP;
+            else diff = prevHP - this.playerPokemon!.HP;
             console.log(HPCont, prevHP, diff, this.playerPokemon!.HP);
 
             if (diff > 0) {
                 for (let i = 0; i < diff; i++) {
                     setTimeout(() => {
-                        prevHP -= 1;
+                        if (gain) prevHP += 1;
+                        else prevHP -= 1;
                         HPCont.innerText = prevHP.toString();
                     }, i * (1000 / diff));
                 }
@@ -346,8 +349,12 @@ export class Battle {
                 playerMove.pp -= 1;
                 this.dropHPAnim(true);
 
-                if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!") {
+                if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!" && !attackInfo.includes("rose")) {
                     this.playerPokemonAttack();
+                }
+
+                if (attackInfo == "self") {
+                    this.dropHPAnim(false, true);
                 }
 
                 await this.showInfo(attackInfo);
@@ -357,8 +364,12 @@ export class Battle {
                         attackInfo = this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
                         this.dropHPAnim(false);
 
-                        if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!") {
+                        if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!" && !attackInfo.includes("rose")) {
                             this.wildPokemonAttack();
+                        }
+
+                        if (attackInfo == "self") {
+                            this.dropHPAnim(true, true);
                         }
 
                         await this.showInfo(attackInfo);
@@ -393,8 +404,12 @@ export class Battle {
                 attackInfo = this.wildPokemon.attackPokemon(this.playerPokemon!, wildMove.name);
                 this.dropHPAnim(false);
 
-                if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!") {
+                if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!" && !attackInfo.includes("rose")) {
                     this.wildPokemonAttack();
+                }
+
+                if (attackInfo == "self") {
+                    this.dropHPAnim(true, true);
                 }
 
                 await this.showInfo(attackInfo);
@@ -405,8 +420,12 @@ export class Battle {
                         playerMove.pp -= 1;
                         this.dropHPAnim(true);
 
-                        if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!") {
+                        if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!" && !attackInfo.includes("rose")) {
                             this.playerPokemonAttack();
+                        }
+
+                        if (attackInfo == "self") {
+                            this.dropHPAnim(false, true);
                         }
 
                         await this.showInfo(attackInfo);

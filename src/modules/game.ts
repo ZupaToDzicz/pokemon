@@ -422,7 +422,8 @@ export class Game {
         this.location.setSpawnCords(this.player.cords);
         this.spawnPokemon();
         this.player.pokemon.forEach(pkmn => {
-            pkmn.recoverStats();
+            // pkmn.recoverStats();
+            pkmn.recoverAll();
         });
     }
 

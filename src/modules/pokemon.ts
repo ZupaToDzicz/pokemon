@@ -194,16 +194,13 @@ moves: ${JSON.stringify(this.moves)}`)
 
         else if (move.category == "status") {
             type Stat = "HP" | "attack" | "defense" | "speed" | "special";
-            
+
             if (move.effect.stages) {
                 const stat: Stat = move.effect.stat;
                 if (target.stages[stat] > -6) {
                     target.stages[stat] += move.effect.stages;
                     target[stat] = Math.ceil(stages[target.stages[stat]] * target.max[stat]);
 
-                    // target.printStats();
-                    // console.log(target.stages[stat]);
-                    
                     return `${target.isWild ? "Enemy " : ""}${target.name.toLocaleUpperCase()}'s \n${stat.toLocaleUpperCase()} fell!`;
                 }
 
@@ -217,12 +214,30 @@ moves: ${JSON.stringify(this.moves)}`)
                 target[stat] += eval(move.effect.target);
 
                 if (move.effect.self) {
-                    if (stat == "HP" && this.HP + eval(move.effect.self) > this.max.HP) {
-                        this.HP = this.max.HP;
+                    if (stat == "HP") {
+                        if (this.HP + eval(move.effect.self) > this.max.HP)
+                            this.HP = this.max.HP;
+                        else this.HP += eval(move.effect.self);
+                        return "self";
                     }
                     else {
                         this[stat] += eval(move.effect.self);
+                        return `${this.name.toLocaleUpperCase()}'s \n${stat.toLocaleUpperCase()} rose!`
                     }
+                }
+            }
+
+            else if (move.effect.self) {
+                const stat: Stat = move.effect.stat;
+                if (this.stages[stat] < 6) {
+                    this.stages[stat] += move.effect.stages;
+                    this[stat] = Math.ceil(stages[this.stages[stat]] * this.max[stat]);
+
+                    return `${this.name.toLocaleUpperCase()}'s \n${stat.toLocaleUpperCase()} rose!`;
+                }
+
+                else {
+                    return `Nothing happened!`;
                 }
             }
 
