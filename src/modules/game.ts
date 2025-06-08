@@ -4,13 +4,15 @@ import { Pokemon } from "./pokemon";
 import { Battle } from "./battle";
 import framesData from "../data/frames.json"
 import movesDataJSON from '../data/moves.json'
+import levelsData from '../data/levels.json'
 import { playerSlide, wildPokemonSlide, playerSlideOut } from "./animation";
 
 const frames: { [key: string]: { [key: string]: number } } = framesData;
 const playerFrames: { [key: string]: number } = frames['player-frames'];
 const movesData: { [key: string]: any } = movesDataJSON;
+const levels: { [key: string]: number } = levelsData;
 
-const delay = 2000;
+const delay = 2500;
 const cursorStyles = [
     'top: 64px; left: 32px;',
     'top: 128px; left: 32px;',
@@ -194,6 +196,8 @@ export class Game {
                                 }
 
                                 this.battle.playerPokemon = this.player.pokemon[this.player.cursor];
+                                if (!this.battle.pokemonFighting.includes(this.battle.playerPokemon))
+                                    this.battle.pokemonFighting.push(this.battle.playerPokemon);
 
                                 setTimeout(async () => {
                                     await this.battle!.pokemonOutAnimation();
@@ -369,17 +373,15 @@ export class Game {
                             this.showMenu = "battle";
                             this.changeMenu();
                         })
-                        .catch(() => {
+                        .catch(async () => {
                             if (!this.battle!.wildPokemon.isAlive()) {
-                                this.endFight();
+                                await this.endFight();
                             }
 
                             else if (!this.player.hasAlivePokemon()) {
                                 this.battle!.setText(`All of You POKéMON fainted!`)
                                 document.getElementById("player-pokemon-interface")!.style.display = "none";
-                                setTimeout(() => {
-                                    this.endFight();
-                                }, delay);
+                                await this.endFight();
                             }
 
                             else {
@@ -413,7 +415,51 @@ export class Game {
         movePP.innerText = `${this.battle!.playerPokemon!.moves[this.battle!.cursor].pp}/${movesData[this.battle!.playerPokemon!.moves[this.battle!.cursor].name].pp}`;
     }
 
-    endFight() {
+    async expGain() {
+        return new Promise<void>(async (resolve) => {
+            setTimeout(() => {
+                document.getElementById("wild-pokemon-interface")!.style.display = "none";
+                document.getElementById("player-pokemon-interface")!.style.display = "none";
+                document.getElementById("pokeball")!.style.display = "none";
+            }, delay);
+
+            if (this.player.hasAlivePokemon()) {
+                const exp = this.battle!.calcExp();
+                for (const pkmn of this.battle!.pokemonFighting) {
+                    const index = this.battle!.pokemonFighting.indexOf(pkmn);
+                    let levelUp = false;
+                    if (pkmn.isAlive()) {
+                        pkmn.exp += exp;
+                        await this.battle!.showInfo(`${pkmn.name.toLocaleUpperCase()} gained \n${exp} EXP. Points!`);
+
+                        if (pkmn.level < 15) {
+                            while (pkmn.exp >= levels[pkmn.level.toString()]) {
+                                pkmn.levelUp();
+                                levelUp = true;
+                            }
+                        }
+
+                        if (levelUp) {
+                            await this.battle!.showInfo(`${pkmn.name.toLocaleUpperCase()} grew \nto level ${pkmn.level}!`);
+                        }
+
+                        if (index == this.battle!.pokemonFighting.length - 1) {
+                            setTimeout(() => {
+                                resolve();
+                            }, delay);
+                        }
+                    }
+
+                    else if (index == this.battle!.pokemonFighting.length - 1) resolve();
+                }
+            }
+            else resolve();
+        })
+    }
+
+    async endFight() {
+        await this.expGain();
+
         this.showMenu = "";
         this.changeMenu();
         this.battle = undefined;
@@ -459,7 +505,7 @@ export class Game {
                         if (this.player.pokemon.length < 6) {
                             this.player.pokemon.push(this.battle!.wildPokemon);
                         }
-                        this.endFight();
+                        await this.endFight();
                         this.blockMovement = false;
                     }
 
@@ -601,7 +647,7 @@ export class Game {
                                 document.getElementById("wild-pokemon-img")?.animate(wildPokemonSlide, { duration: delay - 250 });
 
                                 setTimeout(() => {
-                                    this.battle!.setText(`Wild ${this.battle!.wildPokemon.name.toLocaleUpperCase()} appeared!`);
+                                    this.battle!.setText(`Wild ${this.battle!.wildPokemon.name.toLocaleUpperCase()} \nappeared!`);
                                 }, delay);
 
                                 setTimeout(() => {

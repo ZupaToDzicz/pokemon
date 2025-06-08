@@ -2,11 +2,13 @@ import pokemonData from '../data/pokemon.json'
 import movesDataJSON from '../data/moves.json'
 import typesData from '../data/types.json'
 import stagesData from '../data/stages.json'
+import levelsData from '../data/levels.json'
 
 const data: { [key: string]: any } = pokemonData;
 const movesData: { [key: string]: any } = movesDataJSON;
 const types: { [key: string]: { [key: string]: number } } = typesData;
 const stages: { [key: string]: number } = stagesData;
+const levels: { [key: string]: number } = levelsData;
 
 export class Pokemon {
     name: string;
@@ -17,6 +19,8 @@ export class Pokemon {
     iv: { [key: string]: number };
     isWild: boolean = true;
     catchRate: number;
+    baseExp: number;
+    exp: number;
 
     HP: number;
     attack: number;
@@ -44,6 +48,8 @@ export class Pokemon {
         this.type1 = data[name].type1;
         if (data[name].type2) this.type2 = data[name].type2;
         this.catchRate = data[name].catchRate;
+        this.baseExp = data[name].base.exp;
+        this.exp = levels[level.toString()];
 
         this.iv = {
             "HP": Math.floor(Math.random() * 16),
@@ -189,6 +195,10 @@ moves: ${JSON.stringify(this.moves)}`)
                 target.HP -= damage;
             }
 
+            if (type1 == 2 || (type2 && type2 == 2))
+                return "It's super \neffective!";
+            else if (type1 == 0.5 || (type2 && type2 == 0.5))
+                return "It's not very \neffective...";
             return "";
         }
 

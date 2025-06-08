@@ -2,7 +2,7 @@ import { Player } from "./player";
 import { Pokemon } from "./pokemon";
 import { pokemonOut, pokemonOutCloud, playerPokemonAttack, wildPokemonAttack, wildPokemonDamage, playerPokemonDamage, throwPokeball, wobblePokeball } from "./animation";
 
-const delay: number = 3000;
+const delay: number = 2500;
 
 export class Battle {
     wildPokemon: Pokemon;
@@ -11,15 +11,20 @@ export class Battle {
     mainMenu: string[] = ["fight", "pokemon", "item", "run"];
     cursor: number = 0;
     selectedOption: (string | undefined) = undefined;
+    pokemonFighting: Pokemon[];
 
     constructor(pokemon: Pokemon, player: Player) {
         this.wildPokemon = pokemon;
         this.player = player;
         this.playerPokemon = undefined;
+        this.pokemonFighting = [];
 
         let i = 0;
         while (this.playerPokemon == undefined && i < this.player.pokemon.length) {
-            if (this.player.pokemon[i].isAlive()) this.playerPokemon = this.player.pokemon[i];
+            if (this.player.pokemon[i].isAlive()) {
+                this.playerPokemon = this.player.pokemon[i];
+                this.pokemonFighting.push(this.playerPokemon);
+            }
             i++;
         }
     }
@@ -302,6 +307,7 @@ export class Battle {
                 if (caught) {
                     pokeball.style.backgroundImage = "url('src/gfx/pokeball/caught.png')";
                     this.setText(`${this.wildPokemon.name.toLocaleUpperCase()} was caught!`);
+                    resolve();
                 }
 
                 else {
@@ -320,9 +326,8 @@ export class Battle {
                         this.setText("Aww! It appeared to be caught!");
                     else if (count == 3)
                         this.setText("Shoot! It was so close too!");
+                    setTimeout(() => { resolve(); }, delay);
                 }
-
-                setTimeout(() => { resolve(); }, delay);
             }, 1000 * (count - 1) + 500);
         })
     }
@@ -377,11 +382,10 @@ export class Battle {
                             if (this.playerPokemon!.isAlive()) resolve();
                             else {
                                 this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} \nfainted!`);
-                                await this.pokemonInAnimation();
-
                                 setTimeout(() => {
                                     reject();
                                 }, delay);
+                                await this.pokemonInAnimation();
                             }
                         }, delay);
                     }
@@ -390,10 +394,7 @@ export class Battle {
                         this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nfainted!`);
                         document.getElementById("wild-pokemon-interface")!.style.display = "none";
                         this.pokemonFainted();
-
-                        setTimeout(() => {
-                            reject();
-                        }, delay);
+                        reject();
                     }
 
                 }, delay);
@@ -435,21 +436,17 @@ export class Battle {
                                 this.setText(`Enemy ${this.wildPokemon.name.toLocaleUpperCase()} \nfainted!`);
                                 document.getElementById("wild-pokemon-interface")!.style.display = "none";
                                 this.pokemonFainted();
-
-                                setTimeout(() => {
-                                    reject();
-                                }, delay);
+                                reject();
                             }
                         }, delay);
                     }
 
                     else {
                         this.setText(`${this.playerPokemon!.name.toLocaleUpperCase()} \nfainted!`);
-                        await this.pokemonInAnimation();
-
                         setTimeout(() => {
                             reject();
                         }, delay);
+                        await this.pokemonInAnimation();
                     }
                 }, delay);
             }
@@ -479,5 +476,9 @@ export class Battle {
         else if (w >= 10 && w <= 29) return 1;
         else if (w >= 30 && w <= 69) return 2;
         else return 3;
+    }
+
+    calcExp(): number {
+        return Math.ceil((this.wildPokemon.baseExp * this.wildPokemon.level) / 7 * (1 / this.pokemonFighting.length));
     }
 }
