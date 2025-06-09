@@ -14,10 +14,10 @@ const levels: { [key: string]: number } = levelsData;
 
 const delay = 2500;
 const cursorStyles = [
-    'top: 64px; left: 32px;',
-    'top: 128px; left: 32px;',
-    'top: 64px; left: 224px;',
-    'top: 128px; left: 224px;'
+    {"top": "64px", "left": "32px"},
+    {"top": "128px", "left": "32px"},
+    {"top": "64px", "left": "224px"},
+    {"top": "128px", "left": "224px"}
 ]
 
 export class Game {
@@ -61,6 +61,11 @@ export class Game {
         const battleCont = document.createElement("div");
         battleCont.id = "battle-cont";
         pfCont.append(battleCont);
+
+        const statScreen = document.createElement("div");
+        statScreen.id = "stat-screen";
+        statScreen.style.display = "none";
+        pfCont.append(statScreen);
     }
 
     render() {
@@ -100,6 +105,9 @@ export class Game {
             this.battle!.cursor = 0;
             this.itemMenu();
         }
+        else if (this.showMenu == "stats") {
+            this.statScreen();
+        }
         else if (this.showMenu == "") {
             if (document.getElementById("pokemon-menu") !== null)
                 document.getElementById("pokemon-menu")!.style.display = "none";
@@ -109,6 +117,8 @@ export class Game {
                 document.getElementById("battle-menu")!.style.display = "none";
             if (document.getElementById("fight-menu") !== null)
                 document.getElementById("fight-menu")!.style.display = "none";
+            if (document.getElementById("stat-screen") !== null)
+                document.getElementById("stat-screen")!.style.display = "none";
         }
     }
 
@@ -167,7 +177,12 @@ export class Game {
             }
 
             else if (event.key === "Enter") {
-                if (this.player.optionCursor == 1 && this.player.pokemon.length > 1) {
+                if (this.player.optionCursor == 0) {
+                    this.showMenu = "stats";
+                    this.changeMenu();
+                }
+
+                else if (this.player.optionCursor == 1 && this.player.pokemon.length > 1) {
                     if (this.battle === undefined) {
                         this.player.optionCursor = 0;
                         this.player.switchCursor = 0;
@@ -260,6 +275,20 @@ export class Game {
         switchCursor.style.top = `${64 + 64 * this.player.switchCursor}px`;
     }
 
+    statScreen(event?: KeyboardEvent) {
+        const statScreen = document.getElementById("stat-screen")!;
+        this.player.pokemon[this.player.cursor].renderStats();
+        statScreen.style.display = "block";
+
+        if (event) {
+            if (event.key == "Escape") {
+                statScreen.style.display = "none";
+                this.showMenu = "pokemon-options";
+                this.changeMenu();
+            }
+        }
+    }
+
     battleMenu(event?: KeyboardEvent) {
         document.getElementById("fight-menu")!.style.display = "none";
         document.getElementById("item-menu")!.style.display = "none";
@@ -323,7 +352,8 @@ export class Game {
             }
         }
 
-        battleCursor.style = cursorStyles[this.battle!.cursor];
+        battleCursor.style.top = cursorStyles[this.battle!.cursor].top;
+        battleCursor.style.left = cursorStyles[this.battle!.cursor].left;
     }
 
     fightMenu(event?: KeyboardEvent) {
@@ -706,6 +736,10 @@ export class Game {
 
                 else if (this.showMenu == "switch-pokemon") {
                     this.pokemonMenuSwitch(event);
+                }
+
+                else if (this.showMenu == "stats") {
+                    this.statScreen(event);
                 }
             }
         });

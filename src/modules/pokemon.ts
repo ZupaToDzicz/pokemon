@@ -21,6 +21,7 @@ export class Pokemon {
     catchRate: number;
     baseExp: number;
     exp: number;
+    pokedex: number;
 
     HP: number;
     attack: number;
@@ -50,6 +51,7 @@ export class Pokemon {
         this.catchRate = data[name].catchRate;
         this.baseExp = data[name].base.exp;
         this.exp = levels[level.toString()];
+        this.pokedex = data[name].id;
 
         this.iv = {
             "HP": Math.floor(Math.random() * 16),
@@ -265,6 +267,108 @@ moves: ${JSON.stringify(this.moves)}`)
         if (f > 255) f = 255;
 
         return f;
+    }
+
+    renderStats() {
+        const statScreen = document.getElementById("stat-screen")!;
+        statScreen.innerHTML = "";
+
+        const statImage = document.createElement("div");
+        statImage.id = "stat-img";
+        statImage.style.backgroundImage = `url('src/gfx/pokemon-front-1/${this.name}.png')`;
+        statScreen.append(statImage);
+
+        const number = document.createElement("div");
+        number.innerText = this.pokedex.toString().padStart(3, "0");
+        number.id = "stat-number";
+        statScreen.append(number);
+
+        const statName = document.createElement("div");
+        statName.innerText = this.name.toLocaleUpperCase();
+        statName.id = "stat-name";
+        statScreen.append(statName);
+
+        const statLevel = document.createElement("div");
+        statLevel.innerText = this.level.toString();
+        statLevel.id = "stat-level";
+        statScreen.append(statLevel);
+
+        const statAttack = document.createElement("div");
+        statAttack.classList.add("stat-item");
+        statAttack.innerText = this.max.attack.toString();
+        statAttack.style.top = "352px";
+        statScreen.append(statAttack);
+
+        const statDefense = document.createElement("div");
+        statDefense.classList.add("stat-item");
+        statDefense.innerText = this.max.defense.toString();
+        statDefense.style.top = "416px";
+        statScreen.append(statDefense);
+
+        const statSpeed = document.createElement("div");
+        statSpeed.classList.add("stat-item");
+        statSpeed.innerText = this.max.speed.toString();
+        statSpeed.style.top = "480px";
+        statScreen.append(statSpeed);
+
+        const statSpecial = document.createElement("div");
+        statSpecial.classList.add("stat-item");
+        statSpecial.innerText = this.max.special.toString();
+        statSpecial.style.top = "544px";
+        statScreen.append(statSpecial);
+
+        const HPBarCont = document.createElement("div");
+        HPBarCont.classList.add("hp-bar-cont");
+        statScreen.append(HPBarCont);
+        HPBarCont.style.top = "128px";
+        HPBarCont.style.left = "320px";
+
+        let HPColor = "#48a058", HPPercent;
+        HPPercent = this.HP / this.max.HP;
+        if (HPPercent <= 0.25) HPColor = "#c33b25";
+        else if (HPPercent <= 0.5) HPColor = "#c49009";
+
+        const HPBar = document.createElement("div");
+        HPBar.classList.add("hp-bar");
+        HPBar.style.width = `${Math.round(HPPercent * 192)}px`;
+        HPBar.style.background = HPColor;
+        HPBarCont.append(HPBar);
+
+        const statHP = document.createElement("div");
+        statHP.innerText = `${this.HP}/${this.max.HP}`;
+        statHP.id = "stat-hp";
+        statScreen.append(statHP);
+
+        const statStatus = document.createElement("div");
+        statStatus.id = "stat-status";
+        statStatus.innerText = this.isAlive() ? "OK" : "FNT";
+        statScreen.append(statStatus);
+
+        const statType1Label = document.createElement("div");
+        statType1Label.innerText = "TYPE1/";
+        statType1Label.classList.add("stat-type-label");
+        statType1Label.style.top = "320px"
+        statScreen.append(statType1Label);
+
+        const statType1 = document.createElement("div");
+        statType1.innerText = this.type1.toLocaleUpperCase();
+        statType1.classList.add("stat-type");
+        statType1.style.top = "352px"
+        statScreen.append(statType1);
+
+        if (this.type2) {
+            const statType2Label = document.createElement("div");
+            statType2Label.innerText = "TYPE2/";
+            statType2Label.classList.add("stat-type-label");
+            statType2Label.style.top = "384px"
+            statScreen.append(statType2Label);
+
+            const statType2 = document.createElement("div");
+            statType2.innerText = this.type2!.toLocaleUpperCase();
+            statType2.classList.add("stat-type");
+            statType2.style.top = "416px"
+            statScreen.append(statType2);
+        }
     }
 }
 

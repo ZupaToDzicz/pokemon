@@ -69,25 +69,13 @@ body {
     background-image: url("../gfx/grass.png");
 }
 
-/* #main-menu {
-    background-color: none;
-    width: calc(var(--menu-x) * var(--size) * 1px);
-    height: calc(var(--menu-y) * var(--size) * 1px);
-    background-image: url("../gfx/main-menu-small.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: absolute;
-    right: 0;
-    display: none;
-} */
-
 #battle-cont {
     height: calc(var(--y) * var(--size) * 1px);
     width: calc(var(--x) * var(--size) * 1px);
     background-image: url("../gfx/battle-interface.png");
     background-position: center;
     display: none;
-    position: relative;
+    position: absolute;
     z-index: 3;
     font-size: 32px;
 }
@@ -365,4 +353,71 @@ body {
     z-index: 10;
     top: 192px;
     left: 448px;
+}
+
+#stat-screen {
+    width: 100%;
+    height: 100%;
+    background-image: url("../gfx/stat-screen-1.png");
+    position: absolute;
+    font-size: 32px;
+    z-index: 11;
+}
+
+#stat-screen > div {
+    position: absolute;
+}
+
+#stat-img {
+    width: 224px;
+    height: 224px;
+    z-index: 20;
+    top: 32px;
+    left: 32px;
+    transform: scaleX(-1);
+}
+
+#stat-number {
+    top: 256px;
+    left: 96px;
+}
+
+#stat-name {
+    top: 64px;
+    left: 288px;
+}
+
+#stat-level {
+    top: 93px;
+    left: 480px;
+}
+
+.stat-item {
+    width: 96px;
+    text-align: end;
+    left: 192px;
+    line-height: 32px;
+}
+
+#stat-hp {
+    width: 224px;
+    text-align: center;
+    top: 160px;
+    right: 32px;
+}
+
+.stat-type {
+    right: 32px;
+    width: 256px;
+    text-align: end;
+}
+
+.stat-type-label {
+    left: 320px;
+    line-height: 32px;
+}
+
+#stat-status {
+    top: 224px;
+    left: 512px;
 }
