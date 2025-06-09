@@ -26,6 +26,62 @@ body {
     background-color: #2a2a2a;
 }
 
+#title-screen {
+    height: calc(var(--y) * var(--size) * 1px);
+    width: calc(var(--x) * var(--size) * 1px);
+    background-image: url("../gfx/title-screen.png");
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding-top: 250px;
+}
+
+#title-screen > div {
+    font-size: 20px;
+}
+
+#title-screen input {
+    width: 300px;
+    background: none;
+    font-size: 24px;
+    font-family: 'Pokemon', sans-serif;
+    border: none;
+    border-bottom: 4px solid black;
+    padding: 8px;
+    margin-bottom: 12px;
+    border-radius: 10px 10px 0 0;
+}
+
+#title-screen input:focus {
+    outline: none;
+    background: white;
+}
+
+#starter-cont {
+    display: flex;
+    gap: 32px;
+    position: relative;
+    padding-top: 20px;
+}
+
+.starter-img {
+    width: 160px;
+    height: 180px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+}
+
+.starter-img:hover {
+    transform: scale(1.1);
+}
+
+.starter-selected {
+    background-color: pink;
+}
+
 #container {
     height: calc(var(--y) * var(--size) * 1px);
     width: calc(var(--x) * var(--size) * 1px);

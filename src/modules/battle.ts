@@ -277,7 +277,7 @@ export class Battle {
     }
 
     async throwPokeballAnimation() {
-        this.setText("You used\n POKé BALL!");
+        this.setText(`${this.player.name} used\n POKé BALL!`);
         const pokeball = document.getElementById("pokeball")!;
         pokeball.style.display = "block";
         pokeball.animate(throwPokeball, { duration: 500 });
