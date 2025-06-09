@@ -20,8 +20,13 @@ input.maxLength = 8;
 titleScreen.append(input);
 input.focus();
 
+const startLabel = document.createElement("div");
+startLabel.id = "start-label";
+startLabel.innerHTML = "Press ENTER to begin Your adventure!";
+titleScreen.append(startLabel);
+
 const starterLabel = document.createElement("div");
-starterLabel.innerHTML = "Choose Your starter";
+starterLabel.innerHTML = "Choose Your starter POKéMON";
 titleScreen.append(starterLabel);
 
 const starterCont = document.createElement("div");
@@ -65,8 +70,6 @@ function startGame(e: KeyboardEvent) {
         game.spawnPokemon();
     }
 }
-
-
 
 
 // sprites

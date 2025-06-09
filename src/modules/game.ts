@@ -5,7 +5,8 @@ import { Battle } from "./battle";
 import framesData from "../data/frames.json"
 import movesDataJSON from '../data/moves.json'
 import levelsData from '../data/levels.json'
-import { playerSlide, wildPokemonSlide, playerSlideOut } from "./animation";
+import { playerSlide, wildPokemonSlide, playerSlideOut, beginFight } from "./animation";
+import { music } from "../main";
 
 const frames: { [key: string]: { [key: string]: number } } = framesData;
 const playerFrames: { [key: string]: number } = frames['player-frames'];
@@ -14,10 +15,10 @@ const levels: { [key: string]: number } = levelsData;
 
 const delay = 2500;
 const cursorStyles = [
-    {"top": "64px", "left": "32px"},
-    {"top": "128px", "left": "32px"},
-    {"top": "64px", "left": "224px"},
-    {"top": "128px", "left": "224px"}
+    { "top": "64px", "left": "32px" },
+    { "top": "128px", "left": "32px" },
+    { "top": "64px", "left": "224px" },
+    { "top": "128px", "left": "224px" }
 ]
 
 export class Game {
@@ -50,10 +51,6 @@ export class Game {
         this.render();
         this.initControls();
 
-        // const mainMenu = document.createElement("div");
-        // mainMenu.id = "main-menu";
-        // pfCont.append(mainMenu);
-
         const pokemonMenu = document.createElement("div");
         pokemonMenu.id = "pokemon-menu";
         pfCont.append(pokemonMenu);
@@ -66,6 +63,9 @@ export class Game {
         statScreen.id = "stat-screen";
         statScreen.style.display = "none";
         pfCont.append(statScreen);
+
+        music.src = "src/sounds/viridian-city.mp3";
+        music.play();
     }
 
     render() {
@@ -342,6 +342,8 @@ export class Game {
                     document.getElementById("battle-text")!.innerText = "Got away safely!";
                     this.blockMovement = true;
                     setTimeout(() => {
+                        music.src = "src/sounds/viridian-city.mp3";
+                        music.play();
                         this.battle = undefined;
                         this.blockMovement = false;
                         document.getElementById('battle-cont')!.style.display = "none";
@@ -489,6 +491,9 @@ export class Game {
 
     async endFight() {
         await this.expGain();
+
+        music.src = "src/sounds/viridian-city.mp3";
+        music.play();
 
         this.showMenu = "";
         this.changeMenu();
@@ -670,32 +675,39 @@ export class Game {
                         setTimeout(() => {
                             if (this.checkSpawn() && this.player.hasAlivePokemon()) {
                                 this.battle = new Battle(this.spawnPokemon(), this.player);
-                                this.battle.loadBattleScreen();
-                                const playerImg = document.getElementById("player-img")!;
+                                music.src = "src/sounds/battle.mp3";
+                                music.play();
 
-                                playerImg.animate(playerSlide, { duration: delay - 250 });
-                                document.getElementById("wild-pokemon-img")?.animate(wildPokemonSlide, { duration: delay - 250 });
-
-                                setTimeout(() => {
-                                    this.battle!.setText(`Wild ${this.battle!.wildPokemon.name.toLocaleUpperCase()} \nappeared!`);
-                                }, delay);
+                                document.getElementById("pf")!.animate(beginFight, { duration: 2700 });
 
                                 setTimeout(() => {
-                                    playerImg.animate(playerSlideOut, { duration: 500 });
+                                    this.battle!.loadBattleScreen();
+                                    const playerImg = document.getElementById("player-img")!;
+
+                                    playerImg.animate(playerSlide, { duration: delay - 250 });
+                                    document.getElementById("wild-pokemon-img")?.animate(wildPokemonSlide, { duration: delay - 250 });
 
                                     setTimeout(() => {
-                                        playerImg.style.backgroundImage = "none";
-                                    }, 450);
+                                        this.battle!.setText(`Wild ${this.battle!.wildPokemon.name.toLocaleUpperCase()} \nappeared!`);
+                                    }, delay);
 
-                                    setTimeout(async () => {
-                                        await this.battle!.pokemonOutAnimation();
-                                    }, 600);
-                                }, delay * 2);
+                                    setTimeout(() => {
+                                        playerImg.animate(playerSlideOut, { duration: 500 });
 
-                                setTimeout(() => {
-                                    this.showMenu = "battle";
-                                    this.changeMenu();
-                                }, delay * 3.5);
+                                        setTimeout(() => {
+                                            playerImg.style.backgroundImage = "none";
+                                        }, 450);
+
+                                        setTimeout(async () => {
+                                            await this.battle!.pokemonOutAnimation();
+                                        }, 600);
+                                    }, delay * 2);
+
+                                    setTimeout(() => {
+                                        this.showMenu = "battle";
+                                        this.changeMenu();
+                                    }, delay * 3.5);
+                                }, 2500);
                             }
                         }, 200);
                     }

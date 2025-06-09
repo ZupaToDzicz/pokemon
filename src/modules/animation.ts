@@ -73,3 +73,15 @@ export const wobblePokeball = [
     { background: "url('src/gfx/pokeball/right.png')" },
     { background: "url('src/gfx/pokeball/front.png')" }
 ]
+
+export const beginFight = [
+    { opacity: 1 },
+    { opacity: 0 },
+    { opacity: 1 },
+    { opacity: 0 },
+    { opacity: 1 },
+    { opacity: 0 },
+    { opacity: 1 },
+    { opacity: 0 },
+    { opacity: 0 }
+]
