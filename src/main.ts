@@ -50,7 +50,7 @@ starters.forEach(pokemon => {
     const starter = document.createElement("div");
     starter.classList.add("starter-img");
     starter.setAttribute("data-starter", pokemon);
-    starter.style.backgroundImage = `url("src/gfx/pokemon-front-1/${pokemon}.png")`;
+    starter.style.backgroundImage = `url("src/gfx/starters/${pokemon}.png")`;
     starterCont.append(starter);
     if (pokemon == selected) starter.classList.add("starter-selected");
     starter.addEventListener("click", () => { changeStarter(pokemon) });
@@ -64,6 +64,7 @@ function startGame(e: KeyboardEvent) {
         titleScreen.style.display = "none";
         const player = new Player(input.value, 16, 46);
         player.pokemon.push(new Pokemon(selected, 5));
+        player.pokemon.push(new Pokemon("oddish", 1));
         const city = new Location("viridian-forest");
         const game = new Game(player, city);
         game.start();
@@ -90,3 +91,4 @@ function startGame(e: KeyboardEvent) {
 // https://github.com/pcattori/pokemon/blob/master/pokemon/data/moves.json
 // https://gist.github.com/agarie/2620966s
 // https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_icons_in_Generations_I_and_II
+// https://downloads.khinsider.com/game-soundtracks/album/pokemon-game-boy-pok-mon-sound-complete-set-play-cd

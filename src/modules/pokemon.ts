@@ -197,6 +197,13 @@ moves: ${JSON.stringify(this.moves)}`)
                 target.HP -= damage;
             }
 
+            if (move.effect && move.effect.self && move.effect.stat == "HP") {
+                if (this.HP + eval(move.effect.self) > this.max.HP)
+                    this.HP = this.max.HP;
+                else this.HP += eval(move.effect.self);
+                return "self";
+            }
+
             if (type1 == 2 || (type2 && type2 == 2))
                 return "It's super \neffective!";
             else if (type1 == 0.5 || (type2 && type2 == 0.5))

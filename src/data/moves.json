@@ -48,11 +48,7 @@
         "category": "special",
         "power": 40,
         "accuracy": 1.0,
-        "pp": 25,
-        "effect": {
-            "chance": 0.1,
-            "statusCondition": "burn"
-        }
+        "pp": 25
     },
     "leer": {
         "type": "normal",
@@ -111,11 +107,7 @@
         "category": "physical",
         "power": 15,
         "accuracy": 1.0,
-        "pp": 35,
-        "effect": {
-            "chance": 0.3,
-            "statusCondition": "poison"
-        }
+        "pp": 35
     },
     "gust": {
         "type": "normal",
@@ -156,11 +148,7 @@
         "category": "physical",
         "power": 80,
         "accuracy": 0.9,
-        "pp": 15,
-        "effect": {
-            "chance": 0.1,
-            "statusCondition": "flinch"
-        }
+        "pp": 15
     },
     "peck": {
         "type": "flying",
@@ -182,21 +170,17 @@
         "power": 20,
         "accuracy": 1.0,
         "pp": 20,
-        "effects": [
-            "Absorb deals damage and the user will recover 50% of the HP drained."
-        ]
+        "effect": {
+            "stat": "HP",
+            "self": "Math.ceil(damage / 2)"
+        }
     },
     "acid": {
         "type": "poison",
         "category": "physical",
         "power": 40,
         "accuracy": 1.0,
-        "pp": 30,
-        "effect": {
-            "chance": 0.1,
-            "stat": "defense",
-            "stages": -1
-        }
+        "pp": 30
     },
     "leech life": {
         "type": "bug",
@@ -204,9 +188,10 @@
         "power": 20,
         "accuracy": 1.0,
         "pp": 15,
-        "effects": [
-            "Leech Life deals damage and the user will recover 50% of the HP drained."
-        ]
+        "effect": {
+            "stat": "HP",
+            "self": "Math.ceil(damage / 2)"
+        }
     },
     "wrap": {
         "type": "normal",
