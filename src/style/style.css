@@ -58,7 +58,7 @@ body {
 
 #title-screen input:focus {
     outline: none;
-    background: white;
+    background: pink;
 }
 
 #starter-cont {
