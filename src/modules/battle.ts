@@ -1,6 +1,7 @@
 import { Player } from "./player";
 import { Pokemon } from "./pokemon";
 import { pokemonOut, pokemonOutCloud, playerPokemonAttack, wildPokemonAttack, wildPokemonDamage, playerPokemonDamage, throwPokeball, wobblePokeball } from "./animation";
+import { music, sound } from "../main";
 
 const delay: number = 2500;
 
@@ -305,9 +306,14 @@ export class Battle {
         await new Promise<void>((resolve) => {
             setTimeout(() => {
                 if (caught) {
+                    music.pause();
+                    sound.src = "src/sounds/caught.mp3";
+                    sound.play();
                     pokeball.style.backgroundImage = "url('src/gfx/pokeball/caught.png')";
                     this.setText(`${this.wildPokemon.name.toLocaleUpperCase()} was caught!`);
-                    resolve();
+                    setTimeout(() => {
+                        resolve();
+                    }, 1000);
                 }
 
                 else {
@@ -356,6 +362,8 @@ export class Battle {
 
                 if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!" && !attackInfo.includes("rose")) {
                     this.playerPokemonAttack();
+                    sound.src = "src/sounds/tackle.mp3";
+                    sound.play();
                 }
 
                 if (attackInfo == "self") {
@@ -371,6 +379,8 @@ export class Battle {
 
                         if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!" && !attackInfo.includes("rose")) {
                             this.wildPokemonAttack();
+                            sound.src = "src/sounds/tackle.mp3";
+                            sound.play();
                         }
 
                         if (attackInfo == "self") {
@@ -407,6 +417,8 @@ export class Battle {
 
                 if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!" && !attackInfo.includes("rose")) {
                     this.wildPokemonAttack();
+                    sound.src = "src/sounds/tackle.mp3";
+                    sound.play();
                 }
 
                 if (attackInfo == "self") {
@@ -423,6 +435,8 @@ export class Battle {
 
                         if (!attackInfo.includes("missed") && attackInfo != "Nothing happened!" && !attackInfo.includes("rose")) {
                             this.playerPokemonAttack();
+                            sound.src = "src/sounds/tackle.mp3";
+                            sound.play();
                         }
 
                         if (attackInfo == "self") {

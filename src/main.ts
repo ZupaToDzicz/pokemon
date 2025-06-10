@@ -7,6 +7,8 @@ export const music = new Audio("src/sounds/title-screen.mp3");
 music.loop = true;
 music.play();
 
+export const sound = new Audio();
+
 const titleScreen = document.createElement("div");
 titleScreen.id = "title-screen";
 document.body.append(titleScreen);
@@ -64,7 +66,6 @@ function startGame(e: KeyboardEvent) {
         titleScreen.style.display = "none";
         const player = new Player(input.value, 16, 46);
         player.pokemon.push(new Pokemon(selected, 5));
-        player.pokemon.push(new Pokemon("oddish", 1));
         const city = new Location("viridian-forest");
         const game = new Game(player, city);
         game.start();

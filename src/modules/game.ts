@@ -6,7 +6,7 @@ import framesData from "../data/frames.json"
 import movesDataJSON from '../data/moves.json'
 import levelsData from '../data/levels.json'
 import { playerSlide, wildPokemonSlide, playerSlideOut, beginFight } from "./animation";
-import { music } from "../main";
+import { music, sound } from "../main";
 
 const frames: { [key: string]: { [key: string]: number } } = framesData;
 const playerFrames: { [key: string]: number } = frames['player-frames'];
@@ -411,9 +411,11 @@ export class Game {
                             }
 
                             else if (!this.player.hasAlivePokemon()) {
-                                this.battle!.setText(`All of You POKéMON fainted!`)
+                                this.battle!.setText(`All of You POKéMON fainted!`);
                                 document.getElementById("player-pokemon-interface")!.style.display = "none";
-                                await this.endFight();
+                                setTimeout(async () => {
+                                    await this.endFight();
+                                }, delay);
                             }
 
                             else {
@@ -473,6 +475,8 @@ export class Game {
 
                         if (levelUp) {
                             await this.battle!.showInfo(`${pkmn.name.toLocaleUpperCase()} grew \nto level ${pkmn.level}!`);
+                            sound.src = "src/sounds/level-up.mp3";
+                            sound.play();
                         }
 
                         if (index == this.battle!.pokemonFighting.length - 1) {
@@ -490,6 +494,7 @@ export class Game {
     }
 
     async endFight() {
+        music.pause();
         await this.expGain();
 
         music.src = "src/sounds/viridian-city.mp3";
