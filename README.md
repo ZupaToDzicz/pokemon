@@ -1,7 +1,6 @@
 # Pokemon
 Gotta catch 'em all and <del>kill myself</del> become the happiest person in the world :3
 
----
 
 ## Info
 This is a simple game, based on Pokémon Red (Game Freak, Nintendo, 1996).
@@ -16,7 +15,6 @@ npm run dev
 
 The game contains some music, which your browser may turn off by default.
 
----
 
 ## Controls
 
@@ -27,7 +25,6 @@ The game contains some music, which your browser may turn off by default.
 | <kbd>Esc</kbd> | exiting menus with no "cancel" option |
 | <kbd>E</kbd> | opening menu with your Pokémon |
 
----
 
 ## About the game
 
@@ -54,29 +51,26 @@ If you have more than one healthy Pokémon in your team you can switch them at a
 ### Catching a Pokémon
 The access to Poké Balls is unlimited. You can try to catch a Pokémon as many times as you want. There is a higher chance of catching a wild Pokémon if its health is lowered.
 
----
 
 ## To sum up
 I think my Bulbasaur might have accidentally hit me with Sleep Powder or something.
 The game may contain some bugs and by that I don’t mean these little cuties like Weedle or Caterpie.
 If you’ve read up to this point than thank you and have fun playing! Also, have a nice day and a nice coffee :3
 
----
 
 ## Sources and resources
 ### Graphics and sounds
-[Sprites](https://www.spriters-resource.com/game_boy_gbc/pokemonredblue/)
-[Sounds](https://downloads.khinsider.com/game-soundtracks/album/pokemon-game-boy-pok-mon-sound-complete-set-play-cd)
+- [Sprites](https://www.spriters-resource.com/game_boy_gbc/pokemonredblue/)
+- [Sounds](https://downloads.khinsider.com/game-soundtracks/album/pokemon-game-boy-pok-mon-sound-complete-set-play-cd)
 
 ### Information and mechanics
-[Pokémon Database](https://pokemondb.net/)
-[Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Main_Page)
-[Stat calculator](https://pycosites.com/pkmn/stat_gen1.php)
-[StrategyWiki - Pokémon Red moves](https://strategywiki.org/wiki/Pok%C3%A9mon_Red_and_Blue/Moves)
-[The Cave of Dragonflies - capture mechanics](https://www.dragonflycave.com/mechanics/gen-i-capturing)
-[Pokémon moves JSON](https://github.com/pcattori/pokemon/blob/master/pokemon/data/moves.json)
+- [Pokémon Database](https://pokemondb.net/)
+- [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Main_Page)
+- [Stat calculator](https://pycosites.com/pkmn/stat_gen1.php)
+- [StrategyWiki - Pokémon Red moves](https://strategywiki.org/wiki/Pok%C3%A9mon_Red_and_Blue/Moves)
+- [The Cave of Dragonflies - capture mechanics](https://www.dragonflycave.com/mechanics/gen-i-capturing)
+- [Pokémon moves JSON](https://github.com/pcattori/pokemon/blob/master/pokemon/data/moves.json)
 
----
 
-**POKÉMON**
+**POKÉMON** <br>
 **GOTTA CATCH 'EM ALL**
