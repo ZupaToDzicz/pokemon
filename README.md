@@ -1,4 +1,4 @@
-# Pokemon
+# Pokémon
 Gotta catch 'em all and <del>kill myself</del> become the happiest person in the world :3
 
 
@@ -70,7 +70,9 @@ If you’ve read up to this point than thank you and have fun playing! Also, hav
 - [StrategyWiki - Pokémon Red moves](https://strategywiki.org/wiki/Pok%C3%A9mon_Red_and_Blue/Moves)
 - [The Cave of Dragonflies - capture mechanics](https://www.dragonflycave.com/mechanics/gen-i-capturing)
 - [Pokémon moves JSON](https://github.com/pcattori/pokemon/blob/master/pokemon/data/moves.json)
+- [Pokémon types JSON](https://gist.github.com/agarie/2620966)
 
+<br>
 
 **POKÉMON** <br>
 **GOTTA CATCH 'EM ALL**
